@@ -24,8 +24,8 @@ class ConvertMapsToNetCDF4():
         
         # properties of the clone map
         # - number of rows and columns
-        self.nrRows       = pcr.clone().nrRows    
-        self.nrCols       = pcr.clone().nrCols()  
+        self.nrRows       = np.round(pcr.clone().nrRows)    
+        self.nrCols       = np.round(pcr.clone().nrCols())  
         # - upper right coordinate, unit: arc degree ; must be integer (without decimals)
         self.minLongitude = np.round(pcr.clone().west() , 0)         
         self.maxLatitude  = np.round(pcr.clone().north(), 0)
