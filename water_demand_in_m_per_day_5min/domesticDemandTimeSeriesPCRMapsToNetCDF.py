@@ -41,8 +41,8 @@ class ConvertMapsToNetCDF4():
         latMax = self.maxLatitude  - self.cellSize / 2
         lonMin = self.minLongitude + self.cellSize / 2
         lonMax = self.maxLongitude - self.cellSize / 2
-        self.longitudes = np.arange(lonMingit@github.com:edwinkost/edwin_scratch.git,lonMax+deltaLon,deltaLon)
-        self.latitudes=   np.arange(latMax,latMin-deltaLat,-deltaLat)
+        self.longitudes = np.arange(lonMin,lonMax+deltaLon, self.cellSize)
+        self.latitudes=   np.arange(latMax,latMin-deltaLat,-self.cellSize)
         
         # netCDF format and attributes:
         self.format = 'NETCDF4'
