@@ -209,7 +209,7 @@ if __name__ == "__main__":
                 
                 # demand in m/day
                 demand = demand_volume_30min /\
-                         pcr.areaotal(cellArea, uniqueIDs30min)
+                         pcr.areatotal(cellArea, uniqueIDs30min)
                 
                 # covering the map with zero
                 pcrValue = pcr.cover(demand, 0.0)  # unit: m/day                       
