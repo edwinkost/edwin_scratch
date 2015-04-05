@@ -19,7 +19,7 @@ class ConvertMapsToNetCDF4():
         		
         # cloneMap
         # - the cloneMap must be at 5 arc min resolution
-        cloneMap = pcr.readmap(cloneMapFilgit@github.com:edwinkost/edwin_scratch.gite)
+        cloneMap = pcr.readmap(cloneMapFile)
         cloneMap = pcr.boolean(1.0)
         
         # properties of the clone map
@@ -152,7 +152,7 @@ if __name__ == "__main__":
     endYear = 2010
 
     # output and temporary directories
-    out_directory = ""
+    out_directory = "/home/sutan101/data/data_from_yoshi/water_demand/water_demand_in_m_per_day_05min/"
     tmp_directory = out_directory+"/tmp/"
     
     # prepare output and temporary directories:
