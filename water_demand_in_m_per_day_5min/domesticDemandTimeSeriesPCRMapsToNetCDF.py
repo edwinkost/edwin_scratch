@@ -8,9 +8,9 @@ import calendar
 import time
 import re
 import subprocess
+import pcraster as pcr
 import netCDF4 as nc
 import numpy as np
-import pcraster as pcr
 import virtualOS as vos
 
 class ConvertMapsToNetCDF4():
