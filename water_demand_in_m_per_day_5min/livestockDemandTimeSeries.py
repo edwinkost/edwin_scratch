@@ -138,7 +138,7 @@ if __name__ == "__main__":
     # input files
     inputDirectory = "/data/hydroworld/basedata/human/water_demand_wada_et_al_2014/"
     inputFiles     = ['pcrglobwb_historical_PLivUse_monthly_1960_2010.nc4','pcrglobwb_historical_PLivUse_monthly_1960_2010.nc4']
-    inputVarNames  = ['PLivUse','PLivUse']
+    inputVarNames  = ['PLivWW','PLivWW']
     #
     # Note that the unit in input files are in mcm/month, for livestock, gross water demand is equal to netto water demand (everything is consumed)
 
