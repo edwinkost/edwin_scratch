@@ -116,7 +116,7 @@ if __name__ == "__main__":
     
     # clone, landmask and cell area files
     #~ landmask05minFile    = "/data/hydroworld/PCRGLOBWB20/input5min/routing/lddsound_05min.map"
-    landmask05minFile    = "/data/hydroworld/others/Indonesia/Indonesia/Indonesia05min.clone.map"
+    landmask05minFile    = "/data/hydroworld/others/Indonesia//Indonesia05min.clone.map"
     cloneMapFileName     = landmask05minFile 
     cellSizeInArcMinutes = 5.0 
     cellArea05minFile    = "/data/hydroworld/PCRGLOBWB20/input5min/routing/cellsize05min.correct.map"
