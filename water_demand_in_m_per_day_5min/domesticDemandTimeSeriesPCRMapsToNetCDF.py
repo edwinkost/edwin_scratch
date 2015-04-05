@@ -179,7 +179,7 @@ if __name__ == "__main__":
     # cell area at 5 arc min resolution
     cellArea = vos.readPCRmapClone(cellArea05minFile,
                                    cloneMapFileName,tmp_directory)
-    cellArea = pcr.ifthen(landmask,landmask)
+    cellArea = pcr.ifthen(landmask,cellArea)
     
     # ids for every 30 arc min grid:
     uniqueIDs30min = vos.readPCRmapClone(uniqueIDs30minFile,
