@@ -115,7 +115,8 @@ class ConvertMapsToNetCDF4():
 if __name__ == "__main__":
     
     # clone, landmask and cell area files
-    landmask05minFile    = "/data/hydroworld/PCRGLOBWB20/input5min/routing/lddsound_05min.map"
+    #~ landmask05minFile    = "/data/hydroworld/PCRGLOBWB20/input5min/routing/lddsound_05min.map"
+    landmask05minFile    = "/data/hydroworld/others/Indonesia/Indonesia/Indonesia05min.clone.map"
     cloneMapFileName     = landmask05minFile 
     cellSizeInArcMinutes = 5.0 
     cellArea05minFile    = "/data/hydroworld/PCRGLOBWB20/input5min/routing/cellsize05min.correct.map"
@@ -155,6 +156,9 @@ if __name__ == "__main__":
     out_directory = "/home/sutan101/data/data_from_yoshi/water_demand/water_demand_in_m_per_day_05min/"
     tmp_directory = out_directory+"/tmp/"
     
+    # netcdf file name, including its directory
+    ncFileName = out_directory+"/"+ncFileName 
+
     # prepare output and temporary directories:
     try:
         os.makedirs(out_directory)    
