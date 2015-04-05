@@ -34,7 +34,7 @@ class ConvertMapsToNetCDF4():
         if cellSizeInArcMinutes != None: self.cellSize = cellSizeInArcMinutes / 60.0 
         # - lower right coordinate, unit: arc degree ; must be integer (without decimals)
         self.maxLongitude = np.round(self.minLongitude + self.cellSize*self.nrCols, 0)         
-        self.minLatitude  = np.round(self.minLatitude  - self.cellSize*self.nrRows, 0)
+        self.minLatitude  = np.round(self.maxLatitude  - self.cellSize*self.nrRows, 0)
         
         # latitudes and longitudes for netcdf files
         latMin = self.minLatitude  + self.cellSize / 2
