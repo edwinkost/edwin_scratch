@@ -202,7 +202,9 @@ if __name__ == "__main__":
                 # reading values from the input netcdf files (30min)
                 demand_volume_30min = vos.netcdf2PCRobjClone(inputDirectory+inputFiles[iVar],\
                                                              inputVarNames[iVar],
-                                                             fulldate) * 1000.*1000./ monthRange   # unit: m3/day
+                                                             fulldate,
+                                                             None,
+                                                             cloneMapFileName) * 1000.*1000./ monthRange   # unit: m3/day
                 demand_volume_30min = pcr.ifthen(landmask, demand_volume_30min)
                 
                 # demand in m/day
