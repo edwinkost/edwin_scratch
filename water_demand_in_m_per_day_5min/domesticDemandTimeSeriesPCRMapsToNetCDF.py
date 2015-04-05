@@ -15,18 +15,35 @@ import virtualOS as vos
 
 class ConvertMapsToNetCDF4():
     
-    def __init__(self,cloneMapFile,attribute=None,cellSize=None):
+    def __init__(self,cloneMapFile,attribute=None,cellSizeInArcMinutes=None):
         		
         # cloneMap
+        # - the cloneMap must be at 5 arc min resolution
         cloneMap = pcr.readmap(cloneMapFile)
         cloneMap = pcr.boolean(1.0)
         
-        # latitudes and longitudes
-        self.latitudes  = np.unique(pcr.pcr2numpy(pcr.ycoordinate(cloneMap), vos.MV))[::-1]
-        self.longitudes = np.unique(pcr.pcr2numpy(pcr.xcoordinate(cloneMap), vos.MV))
+        # properties of the clone map
+        # - number of rows and columns
+        self.nrRows       = pcr.clone().nrRows    
+        self.nrCols       = pcr.clone().nrCols()  
+        # - upper right coordinate, unit: arc degree ; must be integer (without decimals)
+        self.minLongitude = np.round(pcr.clone().west() , 0)         
+        self.maxLatitude  = np.round(pcr.clone().north(), 0)
+        # - cell resolution, unit: arc degree
+        self.cellSize     = pcr.clone().cellSize()
+        if cellSizeInArcMinutes != None: self.cellSize() = cellSizeInArcMinutes / 60.0 
+        # - lower right coordinate, unit: arc degree ; must be integer (without decimals)
+        self.maxLongitude = np.round(self.minLongitude + self.cellSize*self.nrCols, 0)         
+        self.minLatitude  = np.round(self.minLatitude  - self.cellSize*self.nrRows, 0)
         
-        # 
-
+        # latitudes and longitudes for netcdf files
+        latMin = self.minLatitude  + self.cellSize / 2
+        latMax = self.maxLatitude  - self.cellSize / 2
+        lonMin = self.minLongitude + self.cellSize / 2
+        lonMax = self.maxLongitude - self.cellSize / 2
+        self.longitudes = np.arange(lonMin,lonMax+deltaLon,deltaLon)
+        self.latitudes=   np.arange(latMax,latMin-deltaLat,-deltaLat)
+        
         # netCDF format and attributes:
         self.format = 'NETCDF4'
         self.attributeDictionary = {}
@@ -67,7 +84,6 @@ class ConvertMapsToNetCDF4():
         lon[:]= self.longitudes
 
         for iVar in range(0,len(varNames)):      
-        #~ for iVar in range(1,1+1):      
             shortVarName = varNames[iVar]
             var= rootgrp.createVariable(shortVarName,'f4',('time','lat','lon',) ,fill_value=vos.MV,zlib=False)
             var.standard_name = shortVarName
@@ -98,17 +114,23 @@ class ConvertMapsToNetCDF4():
 
 if __name__ == "__main__":
     
-    cloneMapUsed = '/data/hydroworld/PCRGLOBWB20/input30min/routing/lddsound_30min.map'
-    cellAreaFile = '/data/hydroworld/PCRGLOBWB20/input30min/routing/cellarea30min.map'
+    # clone, landmask and cell area files
+    landmask05minFile  = "/data/hydroworld/PCRGLOBWB20/input5min/routing/ldd5min.map"
+    cloneMapFileName   = landmask05minFile 
+    cellArea05minFile  = "/data/hydroworld/PCRGLOBWB20/input5min/routing/cellsize05min.correct.map"
+    
+    # unique ids for every 30 arc minute grid (provided in scalar values):
+    uniqueIDs30minFile = "/data/hydroworld/others/irrigationZones/half_arc_degree/uniqueIds30min.map "
     
     # attribute for netCDF files 
     attributeDictionary = {}
-    attributeDictionary['title'      ] = "Monthly domestic water demand"
-    attributeDictionary['institution'] = "Dept. of Physical Geography, Utrecht University"
-    attributeDictionary['source'     ] = "None"
-    attributeDictionary['history'    ] = "None"
-    attributeDictionary['references' ] = "None"
-    attributeDictionary['comment'    ] = "Converted from netcdf files provided by Yoshi Wada in October 2014."
+    attributeDictionary['title'      ]  = "Monthly domestic water demand"
+    attributeDictionary['institution']  = "Dept. of Physical Geography, Utrecht University"
+    attributeDictionary['source'     ]  = "None"
+    attributeDictionary['history'    ]  = "None"
+    attributeDictionary['references' ]  = "None"
+    attributeDictionary['comment'    ]  = "This file has 5 arc minute resolution and was prepared by Edwin H. Sutanudjaja in April 2015." 
+    attributeDictionary['comment'    ] += " It is converted and resampled from 30 arc-minutes water demand files provided by Yoshi Wada in October 2014."
     # additional attribute defined in PCR-GLOBWB 
     attributeDictionary['description'] = "None"
 
@@ -120,23 +142,48 @@ if __name__ == "__main__":
     # Note that the unit in input files are in mcm/month
 
     # output files
-    ncFileName = 'domestic_water_demand_version_october_2014.nc'
+    ncFileName = 'domestic_water_demand_version_april_2015.nc'
     varNames   = ['domesticNettoDemand','domesticGrossDemand']
+    varUnits   = ['m.day-1','m.day-1']            
 
-    varUnits = ['m.day-1',
-                'm.day-1']            
-
+    # start year and end year
     staYear = 1960
     endYear = 2010
+
+    # output and temporary directories
+    out_directory = ""
+    tmp_directory = out_directory+"/tmp/"
     
+    # prepare output and temporary directories:
+    try:
+        os.makedirs(out_directory)    
+    except:
+        pass
+    try:
+        os.makedirs(tmp_directory)    
+    except:
+        pass
+            
+    # initiate the netcd file and object: 
     tssNetCDF = ConvertMapsToNetCDF4(cloneMapFile = cloneMapUsed, attribute = attributeDictionary)
     tssNetCDF.createNetCDF(ncFileName,varNames,varUnits)
 
     index = 0 # for posCnt
     
-    pcr.setclone(cloneMapUsed)
-    cellArea05min = pcr.readmap(cellAreaFile)
-
+    # set clone and define land mask region
+    pcr.setclone(landmask05minFile)
+    landmask = pcr.defined(pcr.readmap(landmask05minFile))
+    landmask = pcr.ifthen(landmask, landmask)
+    
+    # cell area at 5 arc min resolution
+    cellArea = vos.readPCRmapClone(cellArea05minFile,
+                                   cloneMapFileName,tmp_directory)
+    cellArea = pcr.ifthen(landmask,landmask)
+    
+    # ids for every 30 arc min grid:
+    uniqueIDs30min = vos.readPCRmapClone(uniqueIDs30minFile,
+                                         cloneMapFileName,tmp_directory) 
+    uniqueIDs30min = pcr.nominal(pcr.ifthen(landmask, uniqueIDs30min))
     
     for iYear in range(staYear,endYear+1):
         for iMonth in range(1,12+1):
@@ -152,17 +199,17 @@ if __name__ == "__main__":
             for iVar in range(0,len(varNames)):      
                 
                 # reading values from the input netcdf files (30min)
-                pcrValue = vos.netcdf2PCRobjClone(inputDirectory+inputFiles[iVar],\
-                                                  inputVarNames[iVar],
-                                                  fulldate) * 1000.*1000./ monthRange   # unit: m3/day
-                pcrValue = pcr.cover(pcrValue / cellArea30min, 0.0)                     # unit: m1/day                       
-
-                # use the maximum value per every 30 arcmin grid
-                pcrValue = pcr.areamximum(pcrValue, uniqueIds30min)
-
-
-
-
+                demand_volume_30min = vos.netcdf2PCRobjClone(inputDirectory+inputFiles[iVar],\
+                                                             inputVarNames[iVar],
+                                                             fulldate) * 1000.*1000./ monthRange   # unit: m3/day
+                demand_volume_30min = pcr.ifthen(landmask, demand_volume_30min)
+                
+                # demand in m/day
+                demand = demand_volume_30min /\
+                         pcr.areaotal(cellArea, uniqueIDs30min)
+                
+                # covering the map with zero
+                pcrValue = pcr.cover(demand, 0.0)  # unit: m/day                       
 
                 # convert values to pcraster object
                 varField = pcr.pcr2numpy(pcrValue, vos.MV)
