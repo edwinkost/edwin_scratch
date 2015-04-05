@@ -19,7 +19,7 @@ class ConvertMapsToNetCDF4():
         		
         # cloneMap
         # - the cloneMap must be at 5 arc min resolution
-        cloneMap = pcr.readmap(cloneMapFile)
+        cloneMap = pcr.readmap(cloneMapFilgit@github.com:edwinkost/edwin_scratch.gite)
         cloneMap = pcr.boolean(1.0)
         
         # properties of the clone map
@@ -31,7 +31,7 @@ class ConvertMapsToNetCDF4():
         self.maxLatitude  = np.round(pcr.clone().north(), 0)
         # - cell resolution, unit: arc degree
         self.cellSize     = pcr.clone().cellSize()
-        if cellSizeInArcMinutes != None: self.cellSize() = cellSizeInArcMinutes / 60.0 
+        if cellSizeInArcMinutes != None: self.cellSize = cellSizeInArcMinutes / 60.0 
         # - lower right coordinate, unit: arc degree ; must be integer (without decimals)
         self.maxLongitude = np.round(self.minLongitude + self.cellSize*self.nrCols, 0)         
         self.minLatitude  = np.round(self.minLatitude  - self.cellSize*self.nrRows, 0)
@@ -41,7 +41,7 @@ class ConvertMapsToNetCDF4():
         latMax = self.maxLatitude  - self.cellSize / 2
         lonMin = self.minLongitude + self.cellSize / 2
         lonMax = self.maxLongitude - self.cellSize / 2
-        self.longitudes = np.arange(lonMin,lonMax+deltaLon,deltaLon)
+        self.longitudes = np.arange(lonMingit@github.com:edwinkost/edwin_scratch.git,lonMax+deltaLon,deltaLon)
         self.latitudes=   np.arange(latMax,latMin-deltaLat,-deltaLat)
         
         # netCDF format and attributes:
@@ -115,9 +115,10 @@ class ConvertMapsToNetCDF4():
 if __name__ == "__main__":
     
     # clone, landmask and cell area files
-    landmask05minFile  = "/data/hydroworld/PCRGLOBWB20/input5min/routing/ldd5min.map"
-    cloneMapFileName   = landmask05minFile 
-    cellArea05minFile  = "/data/hydroworld/PCRGLOBWB20/input5min/routing/cellsize05min.correct.map"
+    landmask05minFile    = "/data/hydroworld/PCRGLOBWB20/input5min/routing/ldd5min.map"
+    cloneMapFileName     = landmask05minFile 
+    cellSizeInArcMinutes = 5.0 
+    cellArea05minFile    = "/data/hydroworld/PCRGLOBWB20/input5min/routing/cellsize05min.correct.map"
     
     # unique ids for every 30 arc minute grid (provided in scalar values):
     uniqueIDs30minFile = "/data/hydroworld/others/irrigationZones/half_arc_degree/uniqueIds30min.map "
@@ -165,7 +166,7 @@ if __name__ == "__main__":
         pass
             
     # initiate the netcd file and object: 
-    tssNetCDF = ConvertMapsToNetCDF4(cloneMapFile = cloneMapUsed, attribute = attributeDictionary)
+    tssNetCDF = ConvertMapsToNetCDF4(cloneMapFile = cloneMapUsed, attribute = attributeDictionary, cellSizeInArcMinutes)
     tssNetCDF.createNetCDF(ncFileName,varNames,varUnits)
 
     index = 0 # for posCnt
