@@ -148,7 +148,7 @@ if __name__ == "__main__":
     varUnits   = ['m.day-1']            
 
     # start year and end year
-    staYear = 1979
+    staYear = 1980
     endYear = 2010
 
     # output and temporary directories
