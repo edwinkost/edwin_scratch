@@ -130,7 +130,7 @@ if __name__ == "__main__":
     attributeDictionary['description']  = "None"
 
     # input files
-    inputDirectory = "/scratch/edwin/data/data_from_yoshi/groundwater/"
+    inputDirectory = "/home/sutan101/data/data_from_yoshi/groundwater/"
     inputFiles     = 'waterdemand_30min_groundwaterabstraction_yearly.nc'
     inputVarNames  = 'gwab'
     #
