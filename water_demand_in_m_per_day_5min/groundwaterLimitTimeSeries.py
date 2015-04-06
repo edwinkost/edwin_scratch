@@ -131,8 +131,8 @@ if __name__ == "__main__":
 
     # input files
     inputDirectory = "/home/sutan101/data/data_from_yoshi/groundwater/"
-    inputFiles     = ['waterdemand_30min_groundwaterabstraction_yearly.nc']
-    inputVarNames  = ['gwab']
+    inputFiles     = 'waterdemand_30min_groundwaterabstraction_yearly.nc'
+    inputVarNames  = 'gwab'
     #
     # Note that the unit in input files are in mcm/month, for livestock, gross water demand is equal to netto water demand (everything is consumed)
 
@@ -190,8 +190,8 @@ if __name__ == "__main__":
 
         # reading values from the input netcdf files (30min)
         abstraction_volume_30min = pcr.roundup(
-                                   vos.netcdf2PCRobjClone(inputDirectory+inputFiles[iVar],\
-                                                          inputVarNames[iVar],
+                                   vos.netcdf2PCRobjClone(inputDirectory+inputFiles,\
+                                                          inputVarNames,
                                                           fulldate,
                                                           None,
                                                           cloneMapFileName)) * 0.001   # unit: bcm/year
