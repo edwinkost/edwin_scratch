@@ -97,7 +97,7 @@ class ConvertMapsToNetCDF4():
         rootgrp.sync()
         rootgrp.close()
 
-    def writePCR2NetCDF(self,ncFileName,varName,varField,timeStamp,posCnt,closeFile=True):
+    def writePCR2NetCDF(self,ncFileName,varName,varField,timeStamp,posCnt):
 
         #-write data to netCDF
         rootgrp= nc.Dataset(ncFileName,'a')    
@@ -110,7 +110,7 @@ class ConvertMapsToNetCDF4():
         rootgrp.variables[shortVarName][posCnt,:,:]= (varField)
 
         rootgrp.sync()
-        if closeFile: rootgrp.close()
+        rootgrp.close()
 
 if __name__ == "__main__":
     
