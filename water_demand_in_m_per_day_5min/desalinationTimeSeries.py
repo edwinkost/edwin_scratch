@@ -152,7 +152,7 @@ if __name__ == "__main__":
     endYear = 2010
 
     # output and temporary directories
-    out_directory = "/home/sutan101/data/data_from_yoshi/desalination_in_m_per_day_05min/"
+    out_directory = "/home/sutan101/data/data_from_yoshi/desalination/desalination_in_m_per_day_05min/"
     tmp_directory = out_directory+"/tmp/"
     
     # netcdf file name, including its directory
