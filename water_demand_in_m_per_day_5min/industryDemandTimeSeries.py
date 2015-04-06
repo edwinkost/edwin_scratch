@@ -143,7 +143,7 @@ if __name__ == "__main__":
     # Note that the unit in input files are in mcm/month
 
     # output files
-    ncFileName = 'industrial_water_demand_version_april_2015.nc'
+    ncFileName = 'industry_water_demand_version_april_2015.nc'
     varNames   = ['industryNettoDemand','industryGrossDemand']
     varUnits   = ['m.day-1','m.day-1']            
 
@@ -152,7 +152,7 @@ if __name__ == "__main__":
     endYear = 2010
 
     # output and temporary directories
-    out_directory = "/home/sutan101/data/data_from_yoshi/water_demand/water_demand_in_m_per_day_05min/"
+    out_directory = "/home/sutan101/data/data_from_yoshi/water_demand/water_demand_in_m_per_day_05min/industry/"
     tmp_directory = out_directory+"/tmp/"
     
     # netcdf file name, including its directory
@@ -222,3 +222,5 @@ if __name__ == "__main__":
 
                 # write values to netcdf files
                 tssNetCDF.writePCR2NetCDF(ncFileName,varNames[iVar],varField,timeStamp,posCnt = index - 1)
+
+
