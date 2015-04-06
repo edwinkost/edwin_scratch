@@ -12,6 +12,7 @@ import gc
 import re
 import math
 import sys
+import types
 
 import netCDF4 as nc
 import numpy as np
@@ -22,9 +23,12 @@ import pcraster as pcr
 MV = 1e20
 smallNumber = 1E-39
 
+# file cache to minimize/reduce opening/closing files.  
+filecache = dict()
+
 def netcdf2PCRobjCloneWithoutTime(ncFile,varName,
                                   cloneMapFileName  = None,\
-                                  LatitudeLongitude = False,\
+                                  LatitudeLongitude = True,\
                                   specificFillValue = None):
     # 
     # EHS (19 APR 2013): To convert netCDF (tss) file to PCR file.
@@ -32,8 +36,16 @@ def netcdf2PCRobjCloneWithoutTime(ncFile,varName,
     #     Only works if cells are 'square'.
     #     Only works if cellsizeClone <= cellsizeInput
     # Get netCDF file and variable name:
-    print ncFile
-    f = nc.Dataset(ncFile) ; 
+    if ncFile in filecache.keys():
+        f = filecache[ncFile]
+        #~ print "Cached: ", ncFile
+    else:
+        f = nc.Dataset(ncFile)
+        filecache[ncFile] = f
+        #~ print "New: ", ncFile
+    
+    #print ncFile
+    #f = nc.Dataset(ncFile)  
     varName = str(varName)
     
     if LatitudeLongitude == True:
@@ -78,8 +90,8 @@ def netcdf2PCRobjCloneWithoutTime(ncFile,varName,
         yIdxSta = int(np.where(abs(f.variables['lat'][:] - (yULClone - 0.5*cellsizeInput)) == minY)[0])
         yIdxEnd = int(math.ceil(yIdxSta + rowsClone /(cellsizeInput/cellsizeClone)))
         cropData = f.variables[varName][yIdxSta:yIdxEnd,xIdxSta:xIdxEnd]
-        factor = int(float(cellsizeInput)/float(cellsizeClone))
-    
+        factor = int(round(float(cellsizeInput)/float(cellsizeClone)))
+
     # convert to PCR object and close f
     if specificFillValue != None:
         outPCR = pcr.numpy2pcr(pcr.Scalar, \
@@ -95,7 +107,7 @@ def netcdf2PCRobjCloneWithoutTime(ncFile,varName,
     #~ print(varName)
     #~ os.system('aguila tmp.map')
     
-    f.close();
+    #f.close();
     f = None ; cropData = None 
     # PCRaster object
     return (outPCR)
@@ -111,8 +123,19 @@ def netcdf2PCRobjClone(ncFile,varName,dateInput,\
     #     Only works if cells are 'square'.
     #     Only works if cellsizeClone <= cellsizeInput
     # Get netCDF file and variable name:
-    print ncFile
-    f = nc.Dataset(ncFile)
+    
+    #~ print ncFile
+    
+    logger.debug('reading variable: '+str(varName)+' from the file: '+str(ncFile))
+    
+    if ncFile in filecache.keys():
+        f = filecache[ncFile]
+        #~ print "Cached: ", ncFile
+    else:
+        f = nc.Dataset(ncFile)
+        filecache[ncFile] = f
+        #~ print "New: ", ncFile
+    
     varName = str(varName)
     
     if LatitudeLongitude == True:
@@ -175,6 +198,7 @@ def netcdf2PCRobjClone(ncFile,varName,dateInput,\
 
     cropData = f.variables[varName][int(idx),:,:]       # still original data
     factor = 1                          # needed in regridData2FinerGrid
+
     if sameClone == False:
         # crop to cloneMap:
         #~ xIdxSta = int(np.where(f.variables['lon'][:] == xULClone + 0.5*cellsizeInput)[0])
@@ -186,8 +210,9 @@ def netcdf2PCRobjClone(ncFile,varName,dateInput,\
         yIdxSta = int(np.where(abs(f.variables['lat'][:] - (yULClone - 0.5*cellsizeInput)) == minY)[0])
         yIdxEnd = int(math.ceil(yIdxSta + rowsClone /(cellsizeInput/cellsizeClone)))
         cropData = f.variables[varName][idx,yIdxSta:yIdxEnd,xIdxSta:xIdxEnd]
-        factor = int(float(cellsizeInput)/float(cellsizeClone))
-    
+
+        factor = int(round(float(cellsizeInput)/float(cellsizeClone)))
+
     # convert to PCR object and close f
     if specificFillValue != None:
         outPCR = pcr.numpy2pcr(pcr.Scalar, \
@@ -198,7 +223,7 @@ def netcdf2PCRobjClone(ncFile,varName,dateInput,\
                   regridData2FinerGrid(factor,cropData,MV), \
                   float(f.variables[varName]._FillValue))
                   
-    f.close();
+    #f.close();
     f = None ; cropData = None 
     # PCRaster object
     return (outPCR)
@@ -502,7 +527,7 @@ def getFullPath(inputPath,absolutePath,completeFileName = True):
     # Function: to get the full absolute path of a folder or a file
           
     # list of suffixes (extensions) that can be used:
-    suffix = ('/','_','.map','.nc','.dat','.txt','.asc','.ldd',\
+    suffix = ('/','_','.nc4','.map','.nc','.dat','.txt','.asc','.ldd',\
               '.001','.002','.003','.004','.005','.006',\
               '.007','.008','.009','.010','.011','.012')
     
@@ -589,7 +614,9 @@ def getMapAttributesALL(cloneMap):
     if err !=None or cOut == []:
         print "Something wrong with mattattr in virtualOS, maybe clone Map does not exist ? "
         sys.exit()
-    mapAttr = {'cellsize': float(cOut.split()[7]) ,\
+    cellsize = float(cOut.split()[7])
+    if arcDegree == True: cellsize = round(cellsize * 360000.)/360000.
+    mapAttr = {'cellsize': float(cellsize)        ,\
                'rows'    : float(cOut.split()[3]) ,\
                'cols'    : float(cOut.split()[5]) ,\
                'xUL'     : float(cOut.split()[17]),\
@@ -599,7 +626,7 @@ def getMapAttributesALL(cloneMap):
     n = gc.collect() ; del gc.garbage[:] ; n = None ; del n
     return mapAttr 
 
-def getMapAttributes(cloneMap,attribute):
+def getMapAttributes(cloneMap,attribute,arcDegree=True):
     co = ['mapattr -p %s ' %(cloneMap)]
     cOut,err = subprocess.Popen(co, stdout=subprocess.PIPE,stderr=open('/dev/null'),shell=True).communicate()
     #print cOut
@@ -611,7 +638,9 @@ def getMapAttributes(cloneMap,attribute):
     del co; del err
     n = gc.collect() ; del gc.garbage[:] ; n = None ; del n
     if attribute == 'cellsize':
-        return float(cOut.split()[7])
+        cellsize = float(cOut.split()[7])
+        if arcDegree == True: cellsize = round(cellsize * 360000.)/360000.
+        return cellsize  
     if attribute == 'rows':
         return int(cOut.split()[3])
         #return float(cOut.split()[3])
@@ -652,11 +681,14 @@ def getLastDayOfMonth(date):
 
 
 
-def getMinMaxMean(mapFile):
+def getMinMaxMean(mapFile,ignoreEmptyMap=False):
     mn = pcr.cellvalue(pcr.mapminimum(mapFile),1)[0]
     mx = pcr.cellvalue(pcr.mapmaximum(mapFile),1)[0]
-    nrValues  = pcr.cellvalue(pcr.maptotal(pcr.scalar(pcr.defined(mapFile))), 1 ) [0] #/ getNumNonMissingValues(mapFile)
-    return mn,mx,(getMapTotal(mapFile) / nrValues)
+    nrValues = pcr.cellvalue(pcr.maptotal(pcr.scalar(pcr.defined(mapFile))), 1 ) [0] #/ getNumNonMissingValues(mapFile)
+    if nrValues == 0.0 and ignoreEmptyMap: 
+        return 0.0,0.0,0.0
+    else:
+        return mn,mx,(getMapTotal(mapFile) / nrValues)
 
 def getMapVolume(mapFile,cellareaFile):
     ''' returns the sum of all grid cell values '''
@@ -666,7 +698,7 @@ def getMapVolume(mapFile,cellareaFile):
 def secondsPerDay():
     return float(3600 * 24)
     
-def getValDivZero(x,y,y_lim,z_def= 0.):
+def getValDivZero(x,y,y_lim=smallNumber,z_def= 0.):
   #-returns the result of a division that possibly involves a zero
   # denominator; in which case, a default value is substituted:
   # x/y= z in case y > y_lim,
