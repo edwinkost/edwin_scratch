@@ -164,7 +164,7 @@ if __name__ == "__main__":
         pass
             
     # initiate the netcd file and object: 
-    tssNetCDF = ConvertMapsToNetCDF4(cloneMapFile = cloneMapFileName, attribute = attributeDictionary, cellSizeInArcMinutes = cellSizeInArcMinutes)
+    tssNetCDF = ConvertMapsToNetCDF4(cloneMapFile = cloneMapFileName, attribute = attributeDictionary)
     tssNetCDF.createNetCDF(ncFileName,varNames,varUnits)
 
     index = 0 # for posCnt
