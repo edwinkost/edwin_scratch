@@ -45,7 +45,7 @@ class ConvertMapsToNetCDF4():
         self.latitudes=   np.arange(latMax,latMin-self.cellSize,-self.cellSize)
         
         # netCDF format and attributes:
-        self.format = 'NETCDF4'
+        self.format = 'NETCDF3_CLASSIC'
         self.attributeDictionary = {}
         if attribute == None:
             self.attributeDictionary['institution'] = "None"
