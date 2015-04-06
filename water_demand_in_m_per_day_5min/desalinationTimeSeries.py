@@ -45,7 +45,7 @@ class ConvertMapsToNetCDF4():
         self.latitudes=   np.arange(latMax,latMin-self.cellSize,-self.cellSize)
         
         # netCDF format and attributes:
-        self.format = 'NETCDF3_CLASSIC'
+        self.format = 'NETCDF4'
         self.attributeDictionary = {}
         if attribute == None:
             self.attributeDictionary['institution'] = "None"
@@ -152,7 +152,7 @@ if __name__ == "__main__":
     endYear = 2010
 
     # output and temporary directories
-    out_directory = "/home/sutan101/data/data_from_yoshi/desalination/desalination_in_m_per_day_05min/"
+    out_directory = "/scratch/edwin/data/data_from_yoshi/desalination/desalination_in_m_per_day_05min/"
     tmp_directory = out_directory+"/tmp/"
     
     # netcdf file name, including its directory

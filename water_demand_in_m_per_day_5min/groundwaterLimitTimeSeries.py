@@ -44,7 +44,7 @@ class ConvertMapsToNetCDF4():
         self.latitudes=   np.arange(latMax,latMin-self.cellSize,-self.cellSize)
         
         # netCDF format and attributes:
-        self.format = 'NETCDF3_CLASSIC'
+        self.format = 'NETCDF4'
         self.attributeDictionary = {}
         if attribute == None:
             self.attributeDictionary['institution'] = "None"
@@ -130,7 +130,7 @@ if __name__ == "__main__":
     attributeDictionary['description']  = "None"
 
     # input files
-    inputDirectory = "/home/sutan101/data/data_from_yoshi/groundwater/"
+    inputDirectory = "/scratch/edwin/data/data_from_yoshi/groundwater/"
     inputFiles     = 'waterdemand_30min_groundwaterabstraction_yearly.nc'
     inputVarNames  = 'gwab'
     #
@@ -146,7 +146,7 @@ if __name__ == "__main__":
     endYear = 2001
 
     # output and temporary directories
-    out_directory = "/home/sutan101/data/data_from_yoshi/groundwater/groundwater_abstraction_limit_30min/"
+    out_directory = "/scratch/edwin/data/data_from_yoshi/groundwater/groundwater_abstraction_limit_30min/"
     tmp_directory = out_directory+"/tmp/"
     
     # netcdf file name, including its directory
