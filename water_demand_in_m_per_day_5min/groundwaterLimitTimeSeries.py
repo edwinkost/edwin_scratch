@@ -181,8 +181,8 @@ if __name__ == "__main__":
     for iYear in range(staYear,endYear+1):
 
         # time stamp
-        timeStamp = datetime.datetime(int(iYear),int(),int(1),int(0))
-        fulldate = '%4i-%02i-%02i' %(int(iYear),int(),int(1))
+        timeStamp = datetime.datetime(int(iYear),int(1),int(1),int(0))
+        fulldate = '%4i-%02i-%02i' %(int(iYear),int(1),int(1))
         print fulldate
 
         # index for time object in the netcdf file:
