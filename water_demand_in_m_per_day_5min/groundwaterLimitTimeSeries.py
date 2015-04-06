@@ -206,8 +206,12 @@ if __name__ == "__main__":
         pcrValue = pcr.cover(abstraction, 0.0)  # unit: m/day                       
 
         # the value should be higher than the previous yeat value
-        if iYear == staYear: preValue = pcrValue
-        if iYear >  staYear: pcrValue = pcr.max(preValue, pcrValue) 
+        if iYear > staYear:
+            pcrValue = pcr.max(preValue, pcrValue)
+            print iYear 
+        else:
+            preValue = pcrValue
+            print 'first year'
         
         region_ids = pcr.uniqueid(pcr.boolean(1.0))
         region_ids_masked = pcr.ifthen(landmask, region_ids)
