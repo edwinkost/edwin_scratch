@@ -143,7 +143,7 @@ if __name__ == "__main__":
     # Note that the unit in input files are in mcm/month, for livestock, gross water demand is equal to netto water demand (everything is consumed)
 
     # output files
-    ncFileName = 'livestock_water_demand_version_april_2015.nc'
+    ncFileName = 'livestock_water_demand_version_april_2015_test.nc'
     varNames   = ['livestockNettoDemand','livestockGrossDemand']
     varUnits   = ['m.day-1','m.day-1']            
 
