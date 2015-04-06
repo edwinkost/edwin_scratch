@@ -209,7 +209,7 @@ if __name__ == "__main__":
         if iYear == staYear: preValue = pcrValue
         if iYear >  staYear: pcrValue = pcr.max(preValue, pcrValue) 
         
-        region_ids = pcr.nominal(pcr.uniqueid(pcr.boolean(1.0)))
+        region_ids = pcr.uniqueid(pcr.boolean(1.0))
         region_ids_masked = pcr.ifthen(landmask, region_ids)
         
         regional_pumping_limit = pcrValue
