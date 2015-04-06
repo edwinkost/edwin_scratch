@@ -143,7 +143,7 @@ if __name__ == "__main__":
     # Note that the unit in input files are in mcm/month, for livestock, gross water demand is equal to netto water demand (everything is consumed)
 
     # output files
-    ncFileName = 'desalination_1980_to_2010_water_version_april_2015.nc'
+    ncFileName = 'desalination_water_version_april_2015.nc'
     varNames   = ['desalination_water_use']
     varUnits   = ['m.day-1']            
 
@@ -152,7 +152,7 @@ if __name__ == "__main__":
     endYear = 2010
 
     # output and temporary directories
-    out_directory = "/home/sutan101/data/data_from_yoshi/water_demand/water_demand_in_m_per_day_05min/"
+    out_directory = "/home/sutan101/data/data_from_yoshi/desalination/water_demand_in_m_per_day_05min/"
     tmp_directory = out_directory+"/tmp/"
     
     # netcdf file name, including its directory
@@ -221,9 +221,6 @@ if __name__ == "__main__":
                 varField = pcr.pcr2numpy(pcrValue, vos.MV)
 
                 # write values to netcdf files
-                if iYear == endYear and iMonth == 12: 
-                    tssNetCDF.writePCR2NetCDF(ncFileName,varNames[iVar],varField,timeStamp,posCnt = index - 1, closeFile = True)
-                else:
-                    tssNetCDF.writePCR2NetCDF(ncFileName,varNames[iVar],varField,timeStamp,posCnt = index - 1, closeFile = False)
+                tssNetCDF.writePCR2NetCDF(ncFileName,varNames[iVar],varField,timeStamp,posCnt = index - 1)
 
 
