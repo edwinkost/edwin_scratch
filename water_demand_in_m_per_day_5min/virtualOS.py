@@ -126,8 +126,6 @@ def netcdf2PCRobjClone(ncFile,varName,dateInput,\
     
     #~ print ncFile
     
-    logger.debug('reading variable: '+str(varName)+' from the file: '+str(ncFile))
-    
     if ncFile in filecache.keys():
         f = filecache[ncFile]
         #~ print "Cached: ", ncFile
@@ -423,7 +421,6 @@ def readPCRmapClone(v,cloneMapFileName,tmpDir,absolutePath=None,isLddMap=False,c
             # resample using GDAL:
             output = tmpDir+'temp.map'
             warp = gdalwarpPCR(v,output,cloneMapFileName,tmpDir,isLddMap,isNomMap)
-            cmd = 'aguila '+output; print(cmd); os.system(cmd)
             # read from temporary file and delete the temporary file:
             PCRmap = pcr.readmap(output)
             if isLddMap == True: PCRmap = pcr.ifthen(pcr.scalar(PCRmap) < 10., PCRmap)
