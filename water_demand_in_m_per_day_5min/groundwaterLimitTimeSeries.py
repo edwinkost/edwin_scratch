@@ -203,7 +203,7 @@ if __name__ == "__main__":
         abstraction = pcr.windowmaximum(abstraction, 1.0) 
         
         # covering the map with zero
-        pcrValue = pcr.cover(demand, 0.0)  # unit: m/day                       
+        pcrValue = pcr.cover(abstraction, 0.0)  # unit: m/day                       
 
         # the value should be higher than the previous yeat value
         if iYear == staYear: preValue = pcrValue
