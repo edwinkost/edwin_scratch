@@ -422,8 +422,8 @@ def readPCRmapClone(v,cloneMapFileName,tmpDir,absolutePath=None,isLddMap=False,c
         else:
             # resample using GDAL:
             output = tmpDir+'temp.map'
-            cmd = 'aguila '+output; print(cmd); os.system(cmd)
             warp = gdalwarpPCR(v,output,cloneMapFileName,tmpDir,isLddMap,isNomMap)
+            cmd = 'aguila '+output; print(cmd); os.system(cmd)
             # read from temporary file and delete the temporary file:
             PCRmap = pcr.readmap(output)
             if isLddMap == True: PCRmap = pcr.ifthen(pcr.scalar(PCRmap) < 10., PCRmap)
