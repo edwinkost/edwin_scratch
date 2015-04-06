@@ -18,7 +18,6 @@ class ConvertMapsToNetCDF4():
     def __init__(self,cloneMapFile,attribute=None,cellSizeInArcMinutes=None):
         		
         # cloneMap
-        # - the cloneMap must be at 5 arc min resolution
         cloneMap = pcr.readmap(cloneMapFile)
         cloneMap = pcr.boolean(1.0)
         
@@ -170,12 +169,12 @@ if __name__ == "__main__":
     index = 0 # for posCnt
     
     # set clone and define land mask region
-    pcr.setclone(landmask05minFile)
-    landmask = pcr.defined(pcr.readmap(landmask05minFile))
+    pcr.setclone(landmaskFile)
+    landmask = pcr.defined(pcr.readmap(landmaskFile))
     landmask = pcr.ifthen(landmask, landmask)
     
-    # cell area at 5 arc min resolution
-    cellArea = vos.readPCRmapClone(cellArea05minFile,
+    # cell area (m2)
+    cellArea = vos.readPCRmapClone(cellAreaFile,
                                    cloneMapFileName,tmp_directory)
     cellArea = pcr.ifthen(landmask,cellArea)
     
