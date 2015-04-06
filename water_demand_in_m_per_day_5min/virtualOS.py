@@ -608,7 +608,7 @@ def isLastDayOfMonth(date):
     else:
         return False
 
-def getMapAttributesALL(cloneMap):
+def getMapAttributesALL(cloneMap,arcDegree=True):
     co = ['mapattr -p %s ' %(cloneMap)]
     cOut,err = subprocess.Popen(co, stdout=subprocess.PIPE,stderr=open('/dev/null'),shell=True).communicate()
     if err !=None or cOut == []:
