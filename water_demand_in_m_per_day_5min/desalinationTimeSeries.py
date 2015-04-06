@@ -97,7 +97,7 @@ class ConvertMapsToNetCDF4():
         rootgrp.sync()
         rootgrp.close()
 
-    def writePCR2NetCDF(self,ncFileName,varName,varField,timeStamp,posCnt):
+    def writePCR2NetCDF(self,ncFileName,varName,varField,timeStamp,posCnt,closeFile=True):
 
         #-write data to netCDF
         rootgrp= nc.Dataset(ncFileName,'a')    
@@ -110,7 +110,7 @@ class ConvertMapsToNetCDF4():
         rootgrp.variables[shortVarName][posCnt,:,:]= (varField)
 
         rootgrp.sync()
-        rootgrp.close()
+        if closeFile: rootgrp.close()
 
 if __name__ == "__main__":
     
@@ -143,12 +143,12 @@ if __name__ == "__main__":
     # Note that the unit in input files are in mcm/month, for livestock, gross water demand is equal to netto water demand (everything is consumed)
 
     # output files
-    ncFileName = 'desalination_water_version_april_2015.nc'
+    ncFileName = 'desalination_1980_to_2010_water_version_april_2015.nc'
     varNames   = ['desalination_water_use']
     varUnits   = ['m.day-1']            
 
     # start year and end year
-    staYear = 1960
+    staYear = 1980
     endYear = 2010
 
     # output and temporary directories
@@ -221,4 +221,9 @@ if __name__ == "__main__":
                 varField = pcr.pcr2numpy(pcrValue, vos.MV)
 
                 # write values to netcdf files
-                tssNetCDF.writePCR2NetCDF(ncFileName,varNames[iVar],varField,timeStamp,posCnt = index - 1)
+                if iYear == endYear and iMonth == 12: 
+                    tssNetCDF.writePCR2NetCDF(ncFileName,varNames[iVar],varField,timeStamp,posCnt = index - 1, closeFile = True)
+                else:
+                    tssNetCDF.writePCR2NetCDF(ncFileName,varNames[iVar],varField,timeStamp,posCnt = index - 1, closeFile = False)
+
+
