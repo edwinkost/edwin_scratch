@@ -178,11 +178,6 @@ if __name__ == "__main__":
                                    cloneMapFileName,tmp_directory)
     cellArea = pcr.ifthen(landmask,cellArea)
     
-    # ids for every 30 arc min grid:
-    uniqueIDs30min = vos.readPCRmapClone(uniqueIDs30minFile,
-                                         cloneMapFileName,tmp_directory) 
-    uniqueIDs30min = pcr.nominal(pcr.ifthen(landmask, uniqueIDs30min))
-    
     for iYear in range(staYear,endYear+1):
 
         # time stamp
