@@ -212,8 +212,8 @@ if __name__ == "__main__":
         region_ids = pcr.nominal(pcr.uniqueid(pcr.boolean(1.0)))
         region_ids_masked = pcr.ifthen(landmask, region_ids)
         
-        pumping_limit = pcrValue
-        pumping_limit_masked = pcr.ifthen(landmask, pumping_limit)
+        regional_pumping_limit = pcrValue
+        regional_pumping_limit_masked = pcr.ifthen(landmask, regional_pumping_limit)
 
         for iVar in range(0,len(varNames)):      
             var = varNames[iVar]
