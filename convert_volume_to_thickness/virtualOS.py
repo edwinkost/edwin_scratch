@@ -199,10 +199,10 @@ def netcdf2PCRobjClone(ncFile,varName,dateInput,\
     # date
     date = dateInput
     if useDoy == "Yes": 
-        logger.debug('Finding the date based on the given climatology doy index (1 to 366, or index 0 to 365)')
+        print('Finding the date based on the given climatology doy index (1 to 366, or index 0 to 365)')
         idx = int(dateInput) - 1
     elif useDoy == "month":  # PS: WE NEED THIS ONE FOR NETCDF FILES that contain only 12 monthly values (e.g. cropCoefficientWaterNC).
-        logger.debug('Finding the date based on the given climatology month index (1 to 12, or index 0 to 11)')
+        print('Finding the date based on the given climatology month index (1 to 12, or index 0 to 11)')
         # make sure that date is in the correct format
         if isinstance(date, str) == True: date = \
                         datetime.datetime.strptime(str(date),'%Y-%m-%d') 
@@ -228,7 +228,7 @@ def netcdf2PCRobjClone(ncFile,varName,dateInput,\
                 msg += "The date "+str(dateInput)+" is NOT available. "
                 msg += "The date "+str(date.year)+"-"+str(date.month)+"-"+str(date.day)+" is used."
                 msg += "\n"
-                logger.warning(msg)
+                print(msg)
             if date.year > last_year_in_nc_file:  
                 date = datetime.datetime(last_year_in_nc_file,date.month,date.day)
                 msg  = "\n"
@@ -236,15 +236,15 @@ def netcdf2PCRobjClone(ncFile,varName,dateInput,\
                 msg += "The date "+str(dateInput)+" is NOT available. "
                 msg += "The date "+str(date.year)+"-"+str(date.month)+"-"+str(date.day)+" is used."
                 msg += "\n"
-                logger.warning(msg)
+                print(msg)
         try:
             idx = nc.date2index(date, f.variables['time'], calendar = f.variables['time'].calendar, \
                                 select ='exact')
             msg = "The date "+str(date.year)+"-"+str(date.month)+"-"+str(date.day)+" is available. The 'exact' option is used while selecting netcdf time."
-            logger.debug(msg)
+            print(msg)
         except:
             msg = "The date "+str(date.year)+"-"+str(date.month)+"-"+str(date.day)+" is NOT available. The 'exact' option CANNOT be used while selecting netcdf time."
-            logger.debug(msg)
+            print(msg)
             try:                                  
                 idx = nc.date2index(date, f.variables['time'], calendar = f.variables['time'].calendar, \
                                     select = 'before')
@@ -259,7 +259,7 @@ def netcdf2PCRobjClone(ncFile,varName,dateInput,\
                 msg += "WARNING related to the netcdf file: "+str(ncFile)+" ; variable: "+str(varName)+" !!!!!!"+"\n"
                 msg += "The date "+str(date.year)+"-"+str(date.month)+"-"+str(date.day)+" is NOT available. The 'after' option is used while selecting netcdf time."
                 msg += "\n"
-            logger.warning(msg)
+            print(msg)
                                                   
     idx = int(idx)                                                  
 
@@ -292,7 +292,7 @@ def netcdf2PCRobjClone(ncFile,varName,dateInput,\
 
     if sameClone == False:
         
-        logger.debug('Crop to the clone map with lower left corner (x,y): '+str(xULClone)+' , '+str(yULClone))
+        print('Crop to the clone map with lower left corner (x,y): '+str(xULClone)+' , '+str(yULClone))
         # crop to cloneMap:
         #~ xIdxSta = int(np.where(f.variables['lon'][:] == xULClone + 0.5*cellsizeInput)[0])
         minX    = min(abs(f.variables['lon'][:] - (xULClone + 0.5*cellsizeInput))) # ; print(minX)
