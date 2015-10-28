@@ -63,15 +63,11 @@ class ConvertVolumeToHeightFramework(DynamicModel):
 
             gross_value = vos.netcdf2PCRobjClone(ncFile  = self.input_netcdf['gross_file_name'],
                                                  varName = self.input_netcdf['gross_variable_name'],
-                                                 dateInput = str(self.modelTime.fulldate),
-                                                 useDoy = None,
-                                                 cloneMapFileName = self.clone_map_file)
+                                                 dateInput = str(self.modelTime.fulldate))
 
             netto_value = vos.netcdf2PCRobjClone(ncFile  = self.input_netcdf['netto_file_name'],
                                                  varName = self.input_netcdf['netto_variable_name'],
-                                                 dateInput = str(self.modelTime.fulldate),
-                                                 useDoy = None,
-                                                 cloneMapFileName = self.clone_map_file)
+                                                 dateInput = str(self.modelTime.fulldate))
             
             # covering with zero and convert the unit to 
             gross_value = pcr.cover(gross_value, 0.0)/self.cell_area                                     
