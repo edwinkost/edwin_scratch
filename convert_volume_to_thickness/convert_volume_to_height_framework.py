@@ -84,12 +84,12 @@ class ConvertVolumeToHeightFramework(DynamicModel):
             # write gross value to netcdf 
             self.output.data2NetCDF(self.output_netcdf['file_name'],\
                                     self.output_netcdf['gross_variable_name'],\
-                                    gross_value,\
+                                    pcr.pcr2numpy(gross_value, vos.MV),\
                                     timeStamp)
             # write netto value to netcdf 
             self.output.data2NetCDF(self.output_netcdf['file_name'],\
                                     self.output_netcdf['netto_variable_name'],\
-                                    netto_value,\
+                                    pcr.pcr2numpy(netto_value, vos.MV),\
                                     timeStamp)
 
         # closing the file at the end of
