@@ -76,6 +76,11 @@ class ConvertVolumeToHeightFramework(DynamicModel):
         # reporting
         if self.modelTime.isLastDayOfMonth():
 
+            # make a dictionary
+            output = {}
+            output[self.output_netcdf['gross_variable_name'] = pcr.pcr2numpy(gross_value, vos.MV)
+            output[self.output_netcdf['netto_variable_name'] = pcr.pcr2numpy(netto_value, vos.MV)
+            
             # time stamp 
             timeStamp = datetime.datetime(self.modelTime.year,\
                                           self.modelTime.month,\
@@ -83,7 +88,7 @@ class ConvertVolumeToHeightFramework(DynamicModel):
             # to netcdf 
             self.output.dataList2NetCDF(self.output_netcdf['file_name'],\
                                        [self.output_netcdf['gross_variable_name'], self.output_netcdf['netto_variable_name']],\
-                                       [pcr.pcr2numpy(gross_value, vos.MV), pcr.pcr2numpy(netto_value, vos.MV)],\
+                                        output,\
                                         timeStamp)
 
         # closing the file at the end of
