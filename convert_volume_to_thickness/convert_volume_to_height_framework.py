@@ -81,16 +81,11 @@ class ConvertVolumeToHeightFramework(DynamicModel):
             timeStamp = datetime.datetime(self.modelTime.year,\
                                           self.modelTime.month,\
                                           self.modelTime.day,0)
-            # write gross value to netcdf 
-            self.output.data2NetCDF(self.output_netcdf['file_name'],\
-                                    self.output_netcdf['gross_variable_name'],\
-                                    pcr.pcr2numpy(gross_value, vos.MV),\
-                                    timeStamp)
-            # write netto value to netcdf 
-            self.output.data2NetCDF(self.output_netcdf['file_name'],\
-                                    self.output_netcdf['netto_variable_name'],\
-                                    pcr.pcr2numpy(netto_value, vos.MV),\
-                                    timeStamp)
+            # write to netcdf 
+            self.output.dataList2NetCDF(self.output_netcdf['file_name'],\
+                                       [self.output_netcdf['gross_variable_name'], self.output_netcdf['netto_variable_name']],\
+                                       [pcr.pcr2numpy(gross_value, vos.MV), pcr.pcr2numpy(netto_value, vos.MV)],\
+                                        timeStamp)
 
         # closing the file at the end of
         if self.modelTime.isLastTimeStep(): self.output.close(self.output_netcdf['file_name'])
