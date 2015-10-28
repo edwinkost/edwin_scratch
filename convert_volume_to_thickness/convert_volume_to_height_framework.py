@@ -30,7 +30,7 @@ class ConvertVolumeToHeightFramework(DynamicModel):
         self.clone_map_file = self.input_netcdf['cell_area']
         pcr.setclone(self.clone_map_file)
         self.clone = {}
-        self.clone['cellsize'] = pcr.clone().cellSize()
+        self.clone['cellsize'] = pcr.clone().cellSize() ; print self.clone['cellsize']
         self.clone['rows']     = int(pcr.clone().nrRows()) 
         self.clone['cols']     = int(pcr.clone().nrCols())
         self.clone['xUL']      = round(pcr.clone().west(), 2)
