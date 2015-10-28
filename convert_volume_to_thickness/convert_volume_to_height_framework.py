@@ -78,8 +78,8 @@ class ConvertVolumeToHeightFramework(DynamicModel):
 
             # make a dictionary
             output = {}
-            output[self.output_netcdf['gross_variable_name'] = pcr.pcr2numpy(gross_value, vos.MV)
-            output[self.output_netcdf['netto_variable_name'] = pcr.pcr2numpy(netto_value, vos.MV)
+            output[self.output_netcdf['gross_variable_name']] = pcr.pcr2numpy(gross_value, vos.MV)
+            output[self.output_netcdf['netto_variable_name']] = pcr.pcr2numpy(netto_value, vos.MV)
             
             # time stamp 
             timeStamp = datetime.datetime(self.modelTime.year,\
