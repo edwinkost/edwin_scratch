@@ -159,6 +159,8 @@ class OutputNetcdf():
 
         date_time = rootgrp.variables['time']
         if posCnt == None: posCnt = len(date_time)
+        
+        print posCnt
 
         for shortVarName in shortVarNameList:
             date_time[posCnt] = nc.date2num(timeStamp,date_time.units,date_time.calendar)

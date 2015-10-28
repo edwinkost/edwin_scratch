@@ -77,7 +77,6 @@ class ConvertVolumeToHeightFramework(DynamicModel):
         if self.modelTime.isLastDayOfMonth():
 
             # time stamp 
-            timestepPCR = self.modelTime.timeStepPCR
             timeStamp = datetime.datetime(self.modelTime.year,\
                                           self.modelTime.month,\
                                           self.modelTime.day,0)
