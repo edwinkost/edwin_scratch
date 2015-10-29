@@ -25,20 +25,20 @@ endDate   = "2010-12-31" # "2013-12-31" # "2014-10-31" #YYYY-MM-DD
 
 # input netcdf files of water demand data:
 input_netcdf = {}
-input_netcdf['gross_file_name']     = "/scratch/edwin/GLOWASIS_water_demand/06min/Global-Water-Demand-Industry-6min-Globe-indw_month.nc4"
+input_netcdf['gross_file_name']     = "/home/sutan101/data/data_from_yoshi/GLOWASIS_water_demand/06min/Global-Water-Demand-Industry-6min-Globe-indw_month.nc4"
 input_netcdf['gross_variable_name'] = "indw"
-input_netcdf['netto_file_name']     = "/scratch/edwin/GLOWASIS_water_demand/06min/Global-Water-Demand-Industry-6min-Globe-indn_month.nc4"
+input_netcdf['netto_file_name']     = "/home/sutan101/data/data_from_yoshi/GLOWASIS_water_demand/06min/Global-Water-Demand-Industry-6min-Globe-indn_month.nc4"
 input_netcdf['netto_variable_name'] = "indn"
 
 # cell area in m2 and cell resolution in arc_degree 
-input_netcdf['cell_area']        = "/scratch/edwin/GLOWASIS_water_demand/06min/clone_and_cell_area_6min/Global_CellArea-m2_06min.map"
+input_netcdf['cell_area']        = "/home/sutan101/data/data_from_yoshi/GLOWASIS_water_demand/06min/clone_and_cell_area_6min/Global_CellArea-m2_06min.map"
 input_netcdf['cell_resolution']  = 6./60.
 
 # output netcdf files:
 output_netcdf = {}
 output_netcdf['format']    = "NETCDF4"
 output_netcdf['zlib']      = False
-output_netcdf['folder']              = "/scratch/edwin/GLOWASIS_water_demand/06min_m_per_day/industry/"
+output_netcdf['folder']              = "/home/sutan101/data/data_from_yoshi/GLOWASIS_water_demand/06min_m_per_day/industry/"
 output_netcdf['file_name']           = output_netcdf['folder']+"/"+"industry"+"_water_demand_6min_meter_per_day.nc"
 output_netcdf['gross_variable_name'] = 'industryGrossDemand'
 output_netcdf['netto_variable_name'] = 'industryNettoDemand'
