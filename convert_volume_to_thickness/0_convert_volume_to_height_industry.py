@@ -37,7 +37,7 @@ input_netcdf['cell_resolution']  = 6./60.
 # output netcdf files:
 output_netcdf = {}
 output_netcdf['format']    = "NETCDF4"
-output_netcdf['zlib']      = True
+output_netcdf['zlib']      = False
 output_netcdf['folder']              = "/scratch/edwin/GLOWASIS_water_demand/06min_m_per_day/industry/"
 output_netcdf['file_name']           = output_netcdf['folder']+"/"+"industry"+"_water_demand_6min_meter_per_day.nc"
 output_netcdf['gross_variable_name'] = 'industryGrossDemand'
