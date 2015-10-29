@@ -27,8 +27,8 @@ endDate   = "2010-12-31" # "2013-12-31" # "2014-10-31" #YYYY-MM-DD
 input_netcdf = {}
 input_netcdf['netto_file_name']     = "/scratch/edwin/GLOWASIS_water_demand/06min/Global-Water-Demand-Livestock-6min-Globe-livn_month.nc4"
 input_netcdf['netto_variable_name'] = "livn"
-input_netcdf['gross_file_name']     = input_netcdf['gross_file_name']      # For the livestock demand, gross demand = netto demand (all consumed)
-input_netcdf['gross_variable_name'] = input_netcdf['gross_variable_name']
+input_netcdf['gross_file_name']     = input_netcdf['netto_file_name']      # For the livestock demand, gross demand = netto demand (all consumed)
+input_netcdf['gross_variable_name'] = input_netcdf['netto_variable_name']
 
 # cell area in m2 and cell resolution in arc_degree 
 input_netcdf['cell_area']        = "/scratch/edwin/GLOWASIS_water_demand/06min/clone_and_cell_area_6min/Global_CellArea-m2_06min.map"
