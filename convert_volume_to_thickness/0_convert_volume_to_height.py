@@ -19,8 +19,8 @@ from currTimeStep import ModelTime
 import virtualOS as vos
 
 # starting and end dates
-startDate = "1960-01-01" # "2008-01-01" # "1990-01-01" #YYYY-MM-DD
-endDate   = "2010-12-31" # "2013-12-31" # "2014-10-31" #YYYY-MM-DD
+startDate = "2000-01-01" # "2008-01-01" # "1990-01-01" #YYYY-MM-DD
+endDate   = "2001-12-31" # "2013-12-31" # "2014-10-31" #YYYY-MM-DD
 
 
 # input netcdf files of water demand data:
