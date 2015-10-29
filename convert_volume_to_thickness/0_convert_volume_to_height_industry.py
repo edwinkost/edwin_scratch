@@ -25,9 +25,9 @@ endDate   = "2010-12-31" # "2013-12-31" # "2014-10-31" #YYYY-MM-DD
 
 # input netcdf files of water demand data:
 input_netcdf = {}
-input_netcdf['gross_file_name']     = "/scratch/edwin/GLOWASIS_water_demand/06min/Global-Water-Demand-Industry-6min-Globe-domw_month.nc4"
+input_netcdf['gross_file_name']     = "/scratch/edwin/GLOWASIS_water_demand/06min/Global-Water-Demand-Industry-6min-Globe-indw_month.nc4"
 input_netcdf['gross_variable_name'] = "indw"
-input_netcdf['netto_file_name']     = "/scratch/edwin/GLOWASIS_water_demand/06min/Global-Water-Demand-Industry-6min-Globe-domn_month.nc4"
+input_netcdf['netto_file_name']     = "/scratch/edwin/GLOWASIS_water_demand/06min/Global-Water-Demand-Industry-6min-Globe-indn_month.nc4"
 input_netcdf['netto_variable_name'] = "indn"
 
 # cell area in m2 and cell resolution in arc_degree 
