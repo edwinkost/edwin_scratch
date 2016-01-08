@@ -1,0 +1,241 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+import os
+import sys
+import datetime
+import calendar
+import time
+import re
+import subprocess
+import pcraster as pcr
+import netCDF4 as nc
+import numpy as np
+import virtualOS as vos
+
+class MakingNetCDF():
+    
+    def __init__(self, cloneMapFile, attribute=None, cellSizeInArcMinutes=None):
+        		
+        # cloneMap
+        # - the cloneMap must be at 5 arc min resolution
+        cloneMap = pcr.readmap(cloneMapFile)
+        cloneMap = pcr.boolean(1.0)
+        
+        # properties of the clone map
+        # - number of rows and columns
+        self.nrRows       = np.round(pcr.clone().nrRows())    
+        self.nrCols       = np.round(pcr.clone().nrCols())  
+        # - upper right coordinate, unit: arc degree ; must be integer (without decimals)
+        self.minLongitude = np.round(pcr.clone().west() , 0)         
+        self.maxLatitude  = np.round(pcr.clone().north(), 0)
+        # - cell resolution, unit: arc degree
+        self.cellSize     = pcr.clone().cellSize()
+        if cellSizeInArcMinutes != None: self.cellSize = cellSizeInArcMinutes / 60.0 
+        # - lower right coordinate, unit: arc degree ; must be integer (without decimals)
+        self.maxLongitude = np.round(self.minLongitude + self.cellSize*self.nrCols, 0)         
+        self.minLatitude  = np.round(self.maxLatitude  - self.cellSize*self.nrRows, 0)
+        
+        # latitudes and longitudes for netcdf files
+        latMin = self.minLatitude  + self.cellSize / 2
+        latMax = self.maxLatitude  - self.cellSize / 2
+        lonMin = self.minLongitude + self.cellSize / 2
+        lonMax = self.maxLongitude - self.cellSize / 2
+        self.longitudes = np.arange(lonMin,lonMax+self.cellSize, self.cellSize)
+        self.latitudes=   np.arange(latMax,latMin-self.cellSize,-self.cellSize)
+        
+        # netCDF format and attributes:
+        self.format = 'NETCDF4'
+        self.attributeDictionary = {}
+        if attribute == None:
+            self.attributeDictionary['institution'] = "None"
+            self.attributeDictionary['title'      ] = "None"
+            self.attributeDictionary['description'] = "None"
+        else:
+            self.attributeDictionary = attribute
+
+    def createNetCDF(self,ncFileName,varNames,varUnits):
+
+        rootgrp= nc.Dataset(ncFileName,'w',format= self.format)
+
+        #-create dimensions - time is unlimited, others are fixed
+        rootgrp.createDimension('time',None)
+        rootgrp.createDimension('lat',len(self.latitudes))
+        rootgrp.createDimension('lon',len(self.longitudes))
+
+        date_time= rootgrp.createVariable('time','f4',('time',))
+        date_time.standard_name= 'time'
+        date_time.long_name= 'Days since 1901-01-01'
+
+        date_time.units= 'Days since 1901-01-01' 
+        date_time.calendar= 'standard'
+
+        lat= rootgrp.createVariable('lat','f4',('lat',))
+        lat.long_name= 'latitude'
+        lat.units= 'degrees_north'
+        lat.standard_name = 'latitude'
+
+        lon= rootgrp.createVariable('lon','f4',('lon',))
+        lon.standard_name= 'longitude'
+        lon.long_name= 'longitude'
+        lon.units= 'degrees_east'
+
+        lat[:]= self.latitudes
+        lon[:]= self.longitudes
+
+        for iVar in range(0,len(varNames)):      
+            shortVarName = varNames[iVar]
+            var= rootgrp.createVariable(shortVarName,'f4',('time','lat','lon',) ,fill_value=vos.MV,zlib=False)
+            var.standard_name = shortVarName
+            var.long_name = shortVarName
+            var.units = varUnits[iVar]
+
+        attributeDictionary = self.attributeDictionary
+        for k, v in attributeDictionary.items():
+          setattr(rootgrp,k,v)
+
+        rootgrp.sync()
+        rootgrp.close()
+
+    def writePCR2NetCDF(self,ncFileName,varName,varField,timeStamp,posCnt):
+
+        #-write data to netCDF
+        rootgrp= nc.Dataset(ncFileName,'a')    
+
+        shortVarName= varName        
+
+        date_time= rootgrp.variables['time']
+        date_time[posCnt]= nc.date2num(timeStamp,date_time.units,date_time.calendar)
+
+        rootgrp.variables[shortVarName][posCnt,:,:]= (varField)
+
+        rootgrp.sync()
+        rootgrp.close()
+
+if __name__ == "__main__":
+    
+    # clone, landmask and cell area files
+    landmask05minFile    = "/projects/0/dfguu/data/hydroworld/PCRGLOBWB20/input5min/routing/lddsound_05min.map"
+    cloneMapFileName     = landmask05minFile 
+    cellSizeInArcMinutes = 5.0 
+    cellArea05minFile    = "/projects/0/dfguu/data/hydroworld/PCRGLOBWB20/input5min/routing/cellsize05min.correct.map"
+    # set clone
+    pcr.setclone(landmask05minFile)
+    
+    # start year and end year
+    staYear = 1960
+    endYear = 2010
+
+    # input files
+    inputDirectory  = "/data/hydroworld/basedata/human/water_demand_wada_et_al_2014/"
+    inputFiles = {}
+    inputFiles["domestic_water_consumption"   ] = inputDirectory + "domesticWaterConsumptionVolume_annuaTot_output.nc"
+    inputFiles["domestic_water_withdrawal"    ] = inputDirectory + "domesticWaterWithdrawalVolume_annuaTot_output.nc"
+    inputFiles["industry_water_consumption"   ] = inputDirectory + "industryWaterConsumptionVolume_annuaTot_output.nc"
+    inputFiles["industry_water_withdrawal"    ] = inputDirectory + "industryWaterWithdrawalVolume_annuaTot_output.nc"
+    inputFiles["livestock_water_consumption"  ] = inputDirectory + "livestockWaterConsumptionVolume_annuaTot_output.nc"
+    inputFiles["livestock_water_withdrawal"   ] = inputDirectory + "livestockWaterWithdrawalVolume_annuaTot_output.nc"
+    inputFiles["irrigation_water_withdrawal"  ] = inputDirectory + "irrigationWaterWithdrawalVolume_annuaTot_output.nc"
+    inputFiles["evaporation_from_irrigation"  ] = inputDirectory + "evaporation_from_irrigation_volume_annuaTot_output.nc"
+    inputFiles["precipitation_at_irrigation"  ] = inputDirectory + "precipitation_at_irrigation_volume_annuaTot_output.nc"
+    inputFiles["total_evaporation"            ] = inputDirectory + "totalEvaporation_annuaTot_output.nc"
+    inputFiles["total_groundwater_abstraction"] = inputDirectory + "totalGroundwaterAbstraction_annuaTot_output.nc"
+    inputFiles["total_groundwater_recharge"   ] = inputDirectory + "gwRecharge_annuaTot_output.nc"
+    inputFiles["total_runoff"                 ] = inputDirectory + "totalRunoff_annuaTot_output.nc"
+    # - some extra input files:
+    inputFiles['area_equipped_with_irrigation'] = "/projects/0/dfguu/data/hydroworld/PCRGLOBWB20/input5min/landSurface/waterDemand/irrigated_areas/irrigationArea05ArcMin.nc"
+
+    # output that will be calculated 
+    outputDirectory = "/scratch-shared/edwin/water_use/"
+    output = {}
+    variable_names  = inputFiles.keys()
+    variable_names += ['irrigation_water_consumption']
+    for var in variable_names:
+        output[var] = {}
+        output[var]['file_name'] = outputDirectory + "/" + str(var) + "_annual_country.nc"
+        output[var]['unit']      = "m3.year-1"
+        if var == 'area_equipped_with_irrigation': output[var]['unit'] = "ha"
+        
+    # making output and temporary directories
+    if os.path.exists(outputDirectory):
+        shutil.rmtree(outputDirectory)
+    os.makedirs(outputDirectory)
+    tmp_directory = out_directory+"/tmp/"
+    os.makedirs(tmp_directory)
+            
+    # attribute for netCDF files 
+    attributeDictionary = {}
+    attributeDictionary['title'      ]  = "PCR-GLOBWB 2 output"
+    attributeDictionary['institution']  = "Dept. of Physical Geography, Utrecht University"
+    attributeDictionary['source'     ]  = "None"
+    attributeDictionary['history'    ]  = "None"
+    attributeDictionary['references' ]  = "None"
+    attributeDictionary['comment'    ]  = "None"
+    # additional attribute defined in PCR-GLOBWB 
+    attributeDictionary['description'] = "prepared by Edwin H. Sutanudjaja"
+
+    # initiate the netcd object: 
+    tssNetCDF = MakingNetCDF(cloneMapFile = cloneMapFileName, attribute = attributeDictionary, cellSizeInArcMinutes = cellSizeInArcMinutes)
+    
+    # making netcdf files:
+    for var in variable_names: tssNetCDF.createNetCDF(output['file_name'], var, output['unit'])
+
+    # class (country) ids
+    uniqueIDsFile = "/projects/0/dfguu/users/edwin/data/country_shp_from_tianyi/World_Polys_High.map"
+    uniqueIDs = vos.readPCRmapClone(cellArea05minFile, cloneMapFileName, tmp_directory)
+    uniqueIDs = pcr.ifthen(pcr.scalar(uniqueIDs) < 0.0, )
+    
+    # landmask                               
+    landmask = pcr.defined(pcr.readmap(landmask05minFile))
+    landmask = pcr.ifthen(landmask, landmask)
+    landmask = pcr.cover(landmask, pcr.defined(uniqueIDs))
+    
+    # extending class (country) ids
+    uniqueIDs = 
+    
+    # cell area at 5 arc min resolution
+    cellArea = vos.readPCRmapClone(cellArea05minFile,
+                                   cloneMapFileName,tmp_directory)
+    cellArea = pcr.ifthen(landmask,cellArea)
+    
+    # calculate the country values 
+    index = 0 # for posCnt
+    for iYear in range(staYear,endYear+1):
+        timeStamp = datetime.datetime(int(iYear), int(12), int(31), int(0))
+
+        fulldate = '%4i-%02i-%02i' %(int(iYear),int(iMonth),int(1))
+        print fulldate
+
+        monthRange = float(calendar.monthrange(int(iYear), int(iMonth))[1])
+        print(monthRange)
+        
+        
+        # writing to netcdf files and a table
+        index = index + 1
+        for iVar in range(0,len(varNames)):      
+            
+            # reading values from the input netcdf files (30min)
+            demand_volume_30min = vos.netcdf2PCRobjClone(inputDirectory+inputFiles[iVar],\
+                                                         inputVarNames[iVar],
+                                                         fulldate,
+                                                         None,
+                                                         cloneMapFileName) * 1000.*1000./ monthRange   # unit: m3/day
+            demand_volume_30min = pcr.ifthen(landmask, demand_volume_30min)
+            
+            # demand in m/day
+            demand = demand_volume_30min /\
+                     pcr.areatotal(cellArea, uniqueIDs30min)
+            
+            # covering the map with zero
+            pcrValue = pcr.cover(demand, 0.0)  # unit: m/day                       
+
+            # convert values to pcraster object
+            varField = pcr.pcr2numpy(pcrValue, vos.MV)
+
+            # write values to netcdf files
+            tssNetCDF.writePCR2NetCDF(ncFileName,varNames[iVar],varField,timeStamp,posCnt = index - 1)
+            
+            # write values to netcdf files and a table
+
+    # calculate the country values 
+
