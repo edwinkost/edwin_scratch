@@ -186,15 +186,12 @@ if __name__ == "__main__":
                              cellSizeInArcMinutes = cellSizeInArcMinutes)
     # making netcdf files:
     for var in variable_names:
-        print var
-        print output[var]['file_name']
-        print output[var]['unit']
         tssNetCDF.createNetCDF(output[var]['file_name'], var, output[var]['unit'])
 
     # class (country) ids
     uniqueIDsFile = "/projects/0/dfguu/users/edwin/data/country_shp_from_tianyi/World_Polys_High.map"
     uniqueIDs = pcr.nominal(\
-                vos.readPCRmapClone(cellArea05minFile, cloneMapFileName, tmp_directory, 
+                vos.readPCRmapClone(uniqueIDsFile, cloneMapFileName, tmp_directory, 
                                     None, False, None, True))
     uniqueIDs = pcr.ifthen(pcr.scalar(uniqueIDs) >= 0.0, uniqueIDs)
     
