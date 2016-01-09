@@ -242,13 +242,22 @@ if __name__ == "__main__":
         # reading pcraster files:
         for var in inputFiles.keys():        
             print inputFiles[var]
-            output[var]['pcr_value'] = vos.netcdf2PCRobjClone(ncFile = inputFiles[var],\
-                                                              varName = "Automatic",\
-                                                              dateInput = fulldate,
-                                                              useDoy = None,
-                                                              cloneMapFileName  = cloneMapFileName,
-                                                              LatitudeLongitude = True,
-                                                              specificFillValue = None)
+            if var == "area_equipped_with_irrigation":
+                output[var]['pcr_value'] = vos.netcdf2PCRobjClone(ncFile = inputFiles[var],\
+                                                                  varName = "Automatic",\
+                                                                  dateInput = fulldate,
+                                                                  useDoy = None,
+                                                                  cloneMapFileName  = cloneMapFileName,
+                                                                  LatitudeLongitude = True,
+                                                                  specificFillValue = None)
+            else:
+                output[var]['pcr_value'] = vos.netcdf2PCRobjClone(ncFile = inputFiles[var],\
+                                                                  varName = "Automatic",\
+                                                                  dateInput = fulldate,
+                                                                  useDoy = "yearly",
+                                                                  cloneMapFileName  = cloneMapFileName,
+                                                                  LatitudeLongitude = True,
+                                                                  specificFillValue = None)
 
         # calculating irrigation water consumption
         output['irrigation_water_consumption']['pcr_value'] = output['evaporation_from_irrigation']['pcr_value'] * \

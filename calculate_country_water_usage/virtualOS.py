@@ -138,7 +138,8 @@ def netcdf2PCRobjClone(ncFile,varName,dateInput,\
     if varName == "Automatic":
         for key in f.variables.keys():
             if key not in ['latitude', 'longitude', 'lat', 'lon', 'time']:
-				varName = key                                                                                                                                                            
+				varName = key  
+				print varName                                                                                                                                                          
 
     if LatitudeLongitude == True:
         try:
