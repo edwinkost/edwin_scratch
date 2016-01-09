@@ -187,6 +187,9 @@ if __name__ == "__main__":
                              cellSizeInArcMinutes = cellSizeInArcMinutes)
     # making netcdf files:
     for var in variable_names:
+        print var
+        print output[var]['file_name']
+        print output[var]['unit']
         tssNetCDF.createNetCDF(output[var]['file_name'], var, output[var]['unit'])
 
     # class (country) ids
