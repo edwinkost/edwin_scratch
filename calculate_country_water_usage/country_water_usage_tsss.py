@@ -221,7 +221,7 @@ if __name__ == "__main__":
         uniqueIDs = pcr.cover(uniqueIDs, pcr.windowmajority(uniqueIDs, 0.5))
     # - use only cells within the landmask
     uniqueIDs = pcr.ifthen(landmask, uniqueIDs)
-    pcr.report(uniqueIDs, "/class_ids.map")                                
+    pcr.report(uniqueIDs, "class_ids.map")                                
     
     # cell area at 5 arc min resolution
     cellArea = vos.readPCRmapClone(cellArea05minFile,
