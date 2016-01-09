@@ -272,6 +272,8 @@ if __name__ == "__main__":
         # upscaling to the class (country) units and writing to netcdf files and a table
         for var in output.keys():
             
+            print var
+            
             # covering the map with zero
             pcrValue = pcr.cover(output[var]['pcr_value'], 0.0)
             
