@@ -311,7 +311,7 @@ if __name__ == "__main__":
         txt_file.write(header)
         # - add map2col output to the txt_file
         map2col_file = open(tmp_directory+"/" + "summary_" + fulldate + ".txt.tmp", "r")
-        txt_file.write(map2col_file.read)
+        txt_file.write(map2col_file.read())
         # - close all open txt files
         txt_file.close()
         map2col_file.close()
