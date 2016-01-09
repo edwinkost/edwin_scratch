@@ -278,7 +278,7 @@ if __name__ == "__main__":
             pcrValue = pcr.cover(output[var]['pcr_value'], 0.0)
             
             # upscaling to the class (country) units and converting the units to km3/year
-            if var == "area_equipped_with_irrigation":
+            if var != "area_equipped_with_irrigation":
                 pcrValue = pcr.areatotal(pcrValue, uniqueIDs) / (1000. * 1000. * 1000.)
             else:
                 pcrValue = pcr.areatotal(pcrValue, uniqueIDs)
