@@ -241,7 +241,7 @@ if __name__ == "__main__":
 
         # reading pcraster files:
         for var in inputFiles.keys():        
-            output[var]['pcr_value'] = vos.netcdf2PCRobjClone(inputFiles[var]['file_name'], "Automatic", fulldate, \
+            output[var]['pcr_value'] = vos.netcdf2PCRobjClone(inputFiles[var]['file_name'], "Automatic", fulldate, None, \
                                                               cloneMapFileName)
             
         # calculating irrigation water consumption
