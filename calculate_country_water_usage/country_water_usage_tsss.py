@@ -242,7 +242,7 @@ if __name__ == "__main__":
         # reading pcraster files:
         for var in inputFiles.keys():        
             print inputFiles[var]
-            if var == "area_equipped_with_irrigation":
+            if var != "area_equipped_with_irrigation":
                 output[var]['pcr_value'] = vos.netcdf2PCRobjClone(ncFile = inputFiles[var],\
                                                                   varName = "Automatic",\
                                                                   dateInput = fulldate,
@@ -272,7 +272,10 @@ if __name__ == "__main__":
             pcrValue = pcr.cover(output[var]['pcr_value'], 0.0)
             
             # upscaling to the class (country) units and converting the units to km3/year
-            pcrValue = pcr.areatotal(pcrValue, uniqueIDs) / (1000. * 1000. * 1000.)
+            if var == "area_equipped_with_irrigation":
+                pcrValue = pcr.areatotal(pcrValue, uniqueIDs) / (1000. * 1000. * 1000.)
+            else:
+                pcrValue = pcr.areatotal(pcrValue, uniqueIDs)
             
             # write values to a pcraster map
             pcrFileName = output[var]['file_name'] + ".map"
@@ -282,7 +285,6 @@ if __name__ == "__main__":
             ncFileName = output[var]['file']
             varField = pcr.pcr2numpy(pcrValue, vos.MV)
             tssNetCDF.writePCR2NetCDF(ncFileName, var, varField, timeStamp, posCnt = index - 1)
-            
             
         # write class values to a table
         cmd  = 'map2col -x 1 -y 2 -m NA sample.ids'
