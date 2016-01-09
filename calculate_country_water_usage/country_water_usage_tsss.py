@@ -224,7 +224,7 @@ if __name__ == "__main__":
     # get a sample cell for every id
     x_min_for_each_id = pcr.areaminimum(pcr.xcoordinate(pcr.boolean(1.0)), uniqueIDs)
     y_min_for_each_id = pcr.areaminimum(pcr.ycoordinate(pcr.boolean(1.0)), uniqueIDs)
-    sample_cells      = (pcr.xcoordinate(pcr.boolean(1.0) == x_min_for_each_id) & (pcr.ycoordinate(pcr.boolean(1.0) == x_min_for_each_id)
+    sample_cells      = (pcr.xcoordinate(pcr.boolean(1.0) == x_min_for_each_id) & (pcr.ycoordinate(pcr.boolean(1.0) == x_min_for_each_id))
     uniqueIDs_sample  = pcr.ifthen(sample_cells, uniqueIDs)
     # - save it o a pcraster map file
     pcr.report(uniqueIDs_sample, "sample.ids")                                
