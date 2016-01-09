@@ -135,7 +135,11 @@ def netcdf2PCRobjClone(ncFile,varName,dateInput,\
         #~ print "New: ", ncFile
     
     varName = str(varName)
-    
+    if varName == "Automatic":
+        for key in f.variables.keys():
+            if key not in ['latitude', 'longitude', 'lat', 'lon', 'time']:
+				varName = key                                                                                                                                                            
+
     if LatitudeLongitude == True:
         try:
             f.variables['lat'] = f.variables['latitude']
@@ -307,7 +311,7 @@ def netcdf2PCRobjCloneWind(ncFile,varName,dateInput,useDoy = None,
     # Get netCDF file and variable name:
     f = nc.Dataset(ncFile)
     varName = str(varName)
-
+    
     # date
     date = dateInput
     if useDoy == "Yes": 

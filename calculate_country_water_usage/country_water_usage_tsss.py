@@ -129,19 +129,23 @@ if __name__ == "__main__":
     # input files
     inputDirectory  = "/data/hydroworld/basedata/human/water_demand_wada_et_al_2014/"
     inputFiles = {}
-    inputFiles["domestic_water_consumption"   ] = inputDirectory + "domesticWaterConsumptionVolume_annuaTot_output.nc"
-    inputFiles["domestic_water_withdrawal"    ] = inputDirectory + "domesticWaterWithdrawalVolume_annuaTot_output.nc"
-    inputFiles["industry_water_consumption"   ] = inputDirectory + "industryWaterConsumptionVolume_annuaTot_output.nc"
-    inputFiles["industry_water_withdrawal"    ] = inputDirectory + "industryWaterWithdrawalVolume_annuaTot_output.nc"
-    inputFiles["livestock_water_consumption"  ] = inputDirectory + "livestockWaterConsumptionVolume_annuaTot_output.nc"
-    inputFiles["livestock_water_withdrawal"   ] = inputDirectory + "livestockWaterWithdrawalVolume_annuaTot_output.nc"
-    inputFiles["irrigation_water_withdrawal"  ] = inputDirectory + "irrigationWaterWithdrawalVolume_annuaTot_output.nc"
-    inputFiles["evaporation_from_irrigation"  ] = inputDirectory + "evaporation_from_irrigation_volume_annuaTot_output.nc"
-    inputFiles["precipitation_at_irrigation"  ] = inputDirectory + "precipitation_at_irrigation_volume_annuaTot_output.nc"
-    inputFiles["total_evaporation"            ] = inputDirectory + "totalEvaporation_annuaTot_output.nc"
-    inputFiles["total_groundwater_abstraction"] = inputDirectory + "totalGroundwaterAbstraction_annuaTot_output.nc"
-    inputFiles["total_groundwater_recharge"   ] = inputDirectory + "gwRecharge_annuaTot_output.nc"
-    inputFiles["total_runoff"                 ] = inputDirectory + "totalRunoff_annuaTot_output.nc"
+    inputFiles["domestic_water_consumption"   ] = inputDirectory + "/" + "domesticWaterConsumptionVolume_annuaTot_output.nc"
+    inputFiles["domestic_water_withdrawal"    ] = inputDirectory + "/" + "domesticWaterWithdrawalVolume_annuaTot_output.nc"
+    inputFiles["industry_water_consumption"   ] = inputDirectory + "/" + "industryWaterConsumptionVolume_annuaTot_output.nc"
+    inputFiles["industry_water_withdrawal"    ] = inputDirectory + "/" + "industryWaterWithdrawalVolume_annuaTot_output.nc"
+    inputFiles["livestock_water_consumption"  ] = inputDirectory + "/" + "livestockWaterConsumptionVolume_annuaTot_output.nc"
+    inputFiles["livestock_water_withdrawal"   ] = inputDirectory + "/" + "livestockWaterWithdrawalVolume_annuaTot_output.nc"
+    inputFiles["irrigation_water_withdrawal"  ] = inputDirectory + "/" + "irrigationWaterWithdrawalVolume_annuaTot_output.nc"
+    inputFiles["evaporation_from_irrigation"  ] = inputDirectory + "/" + "evaporation_from_irrigation_volume_annuaTot_output.nc"
+    inputFiles["precipitation_at_irrigation"  ] = inputDirectory + "/" + "precipitation_at_irrigation_volume_annuaTot_output.nc"
+    inputFiles["total_evaporation"            ] = inputDirectory + "/" + "totalEvaporation_annuaTot_output.nc"
+    inputFiles["total_groundwater_abstraction"] = inputDirectory + "/" + "totalGroundwaterAbstraction_annuaTot_output.nc"
+    inputFiles["total_groundwater_recharge"   ] = inputDirectory + "/" + "gwRecharge_annuaTot_output.nc"
+    inputFiles["total_runoff"                 ] = inputDirectory + "/" + "totalRunoff_annuaTot_output.nc"
+    #~ # TODO to be added:
+    #~ inputFiles["total_precipitation"       ] =
+    #~ inputFiles["total_baseflow"            ] =
+
     # - some extra input files:
     inputFiles['area_equipped_with_irrigation'] = "/projects/0/dfguu/data/hydroworld/PCRGLOBWB20/input5min/landSurface/waterDemand/irrigated_areas/irrigationArea05ArcMin.nc"
 
@@ -149,12 +153,14 @@ if __name__ == "__main__":
     outputDirectory = "/scratch-shared/edwin/water_use/"
     output = {}
     variable_names  = inputFiles.keys()
-    variable_names += ['irrigation_water_consumption']
+    variable_names += ['irrigation_water_consumption', 'class_id']
     for var in variable_names:
         output[var] = {}
         output[var]['file_name'] = outputDirectory + "/" + str(var) + "_annual_country.nc"
-        output[var]['unit']      = "m3.year-1"
+        output[var]['unit']      = "km3.year-1"
+        output[var]['pcr_value'] = None
         if var == 'area_equipped_with_irrigation': output[var]['unit'] = "ha"
+        if var == 'class_id': output[var]['class_id'] = "-"
         
     # making output and temporary directories
     if os.path.exists(outputDirectory):
@@ -162,10 +168,10 @@ if __name__ == "__main__":
     os.makedirs(outputDirectory)
     tmp_directory = out_directory+"/tmp/"
     os.makedirs(tmp_directory)
-            
+    
     # attribute for netCDF files 
     attributeDictionary = {}
-    attributeDictionary['title'      ]  = "PCR-GLOBWB 2 output"
+    attributeDictionary['title'      ]  = "PCR-GLOBWB 2"
     attributeDictionary['institution']  = "Dept. of Physical Geography, Utrecht University"
     attributeDictionary['source'     ]  = "None"
     attributeDictionary['history'    ]  = "None"
@@ -175,67 +181,93 @@ if __name__ == "__main__":
     attributeDictionary['description'] = "prepared by Edwin H. Sutanudjaja"
 
     # initiate the netcd object: 
-    tssNetCDF = MakingNetCDF(cloneMapFile = cloneMapFileName, attribute = attributeDictionary, cellSizeInArcMinutes = cellSizeInArcMinutes)
-    
+    tssNetCDF = MakingNetCDF(cloneMapFile = cloneMapFileName, \
+                             attribute = attributeDictionary, \
+                             cellSizeInArcMinutes = cellSizeInArcMinutes)
     # making netcdf files:
-    for var in variable_names: tssNetCDF.createNetCDF(output['file_name'], var, output['unit'])
+    for var in variable_names:
+        tssNetCDF.createNetCDF(output['file_name'], var, output['unit'])
 
     # class (country) ids
     uniqueIDsFile = "/projects/0/dfguu/users/edwin/data/country_shp_from_tianyi/World_Polys_High.map"
-    uniqueIDs = vos.readPCRmapClone(cellArea05minFile, cloneMapFileName, tmp_directory)
-    uniqueIDs = pcr.ifthen(pcr.scalar(uniqueIDs) < 0.0, )
+    uniqueIDs = pcr.nominal(\
+                vos.readPCRmapClone(cellArea05minFile, cloneMapFileName, tmp_directory, 
+                                    None, False, None, True))
+    uniqueIDs = pcr.ifthen(pcr.scalar(uniqueIDs) >= 0.0, uniqueIDs)
     
     # landmask                               
     landmask = pcr.defined(pcr.readmap(landmask05minFile))
     landmask = pcr.ifthen(landmask, landmask)
+    # - extending landmask with uniqueIDs
     landmask = pcr.cover(landmask, pcr.defined(uniqueIDs))
     
     # extending class (country) ids
-    uniqueIDs = 
+    uniqueIDs = pcr.cover(uniqueIDs, pcr.windowmajority(uniqueIDs, 0.5))
+    uniqueIDs = pcr.cover(uniqueIDs, pcr.windowmajority(uniqueIDs, 0.5))
+    uniqueIDs = pcr.cover(uniqueIDs, pcr.windowmajority(uniqueIDs, 0.5))
+    uniqueIDs = pcr.cover(uniqueIDs, pcr.windowmajority(uniqueIDs, 0.5))
+    uniqueIDs = pcr.cover(uniqueIDs, pcr.windowmajority(uniqueIDs, 0.5))
+    # - use only cells within the landmask
+    uniqueIDs = pcr.ifthen(landmask, uniqueIDs)
     
     # cell area at 5 arc min resolution
     cellArea = vos.readPCRmapClone(cellArea05minFile,
-                                   cloneMapFileName,tmp_directory)
-    cellArea = pcr.ifthen(landmask,cellArea)
+                                   cloneMapFileName, tmp_directory)
+    cellArea = pcr.ifthen(landmask, cellArea)
     
+    # moving to the output directory
+    os.chdir(outputDirectory)
+
+    # get a sample cell for every id
+    x_min_for_each_id = pcr.areaminimum(pcr.xcoordinate(pcr.boolean(1.0)), uniqueIDs)
+    y_min_for_each_id = pcr.areaminimum(pcr.ycoordinate(pcr.boolean(1.0)), uniqueIDs)
+    uniqueIDs_sample  = pcr.ifthen((pcr.xcoordinate(pcr.boolean(1.0) == x_min_for_each_id)) &\
+                                   (pcr.ycoordinate(pcr.boolean(1.0) == y_min_for_each_id)), uniqueIDs)
+    # - save it o a pcraster map file
+    pcr.report(uniqueIDs_sample, "sample.ids")                                
+
     # calculate the country values 
     index = 0 # for posCnt
     for iYear in range(staYear,endYear+1):
+        
+        # time stamp and index for netcdf files:
+        index = index + 1
         timeStamp = datetime.datetime(int(iYear), int(12), int(31), int(0))
-
-        fulldate = '%4i-%02i-%02i' %(int(iYear),int(iMonth),int(1))
+        fulldate = '%4i-%02i-%02i'  %(int(iYear), int(12), int(1))
         print fulldate
 
-        monthRange = float(calendar.monthrange(int(iYear), int(iMonth))[1])
-        print(monthRange)
-        
-        
-        # writing to netcdf files and a table
-        index = index + 1
-        for iVar in range(0,len(varNames)):      
+        # reading pcraster files:
+        for var in inputFiles.keys():        
+            output[var]['pcr_value'] = vos.netcdf2PCRobjClone(inputFiles[var]['file_name'], "Automatic", \
+                                                              cloneMapFileName, fulldate)
             
-            # reading values from the input netcdf files (30min)
-            demand_volume_30min = vos.netcdf2PCRobjClone(inputDirectory+inputFiles[iVar],\
-                                                         inputVarNames[iVar],
-                                                         fulldate,
-                                                         None,
-                                                         cloneMapFileName) * 1000.*1000./ monthRange   # unit: m3/day
-            demand_volume_30min = pcr.ifthen(landmask, demand_volume_30min)
-            
-            # demand in m/day
-            demand = demand_volume_30min /\
-                     pcr.areatotal(cellArea, uniqueIDs30min)
+        # calculating irrigation water consumption
+        output['irrigation_water_consumption']['pcr_value'] = output['evaporation_from_irrigation']['pcr_value'] * 
+                                                              vos.getValDivZero(output['irrigation_water_withdrawal']['pcr_value'], \
+                                                                                output['irrigation_water_withdrawal']['pcr_value'] +\
+                                                                                output['precipitation_at_irrigation']['pcr_value'])
+        
+        # upscaling to the class (country) units and writing to netcdf files and a table
+        for var in output.keys():
             
             # covering the map with zero
-            pcrValue = pcr.cover(demand, 0.0)  # unit: m/day                       
-
-            # convert values to pcraster object
-            varField = pcr.pcr2numpy(pcrValue, vos.MV)
-
-            # write values to netcdf files
-            tssNetCDF.writePCR2NetCDF(ncFileName,varNames[iVar],varField,timeStamp,posCnt = index - 1)
+            pcrValue = pcr.cover(output[var]['pcr_value'], 0.0)
             
-            # write values to netcdf files and a table
+            # upscaling to the class (country) units and converting the units to km3/year
+            pcrValue = pcr.areatotal(pcrValue, uniqueIDs) / (1000. * 1000. * 1000.)
+            
+            # write values to a pcraster map
+            pcrFileName = output[var]['file_name'] + ".map"
 
-    # calculate the country values 
-
+            # write values to a netcdf file
+            ncFileName = output[var]['file']
+            varField = pcr.pcr2numpy(pcrValue, vos.MV)
+            tssNetCDF.writePCR2NetCDF(ncFileName, var, varField, timeStamp, posCnt = index - 1)
+            
+            
+        # write class values to a table
+        cmd  = 'map2col -x 1 -y 2 -m NA sample.ids'
+        cmd += " " + str(output[var]['file_name'] + ".map")
+        cmd += " " + "summary_" + fulldate + ".txt"
+        print cmd
+        os.system(cmd)
