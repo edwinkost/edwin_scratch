@@ -299,7 +299,7 @@ if __name__ == "__main__":
         # - header for the table
         header = "x y class_id"
         # - txt file that contains the table
-        txt_file = open(table_directory + "/" + "summary_" + fulldate + "txt", "w")
+        txt_file = open(table_directory + "/" + "summary_" + fulldate + ".txt", "w")
         for var in output.keys():
             header += " " + str(var)
             cmd    += " " + str(tmp_directory) + "/" + str(var) + ".tmp"
