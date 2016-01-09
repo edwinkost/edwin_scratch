@@ -160,7 +160,7 @@ if __name__ == "__main__":
     outputDirectory = "/scratch-shared/edwin/water_use/"
     output = {}
     variable_names  = inputFiles.keys()
-    variable_names += ['irrigation_water_consumption', 'class_id']
+    variable_names += ['irrigation_water_consumption']
     for var in variable_names:
         output[var] = {}
         output[var]['file_name'] = outputDirectory + "/" + str(var) + "_annual_country.nc"
