@@ -294,7 +294,8 @@ if __name__ == "__main__":
 
         # write class values to a table
         cmd  = 'map2col -x 1 -y 2 -m NA sample.ids'
-        cmd += " " + str(output[var]['file_name'] + ".tmp")
+        for var in output.keys():
+            cmd += " " + str(output[var]['file_name'] + ".tmp")
         cmd += " " + "summary_" + fulldate + ".txt"
         print cmd
         os.system(cmd)
