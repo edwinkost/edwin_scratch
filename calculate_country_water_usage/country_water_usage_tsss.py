@@ -190,7 +190,7 @@ if __name__ == "__main__":
         print var
         print output[var]['file_name']
         print output[var]['unit']
-        tssNetCDF.createNetCDF(output[var]['file_name'], var, output[var]['unit'])
+        tssNetCDF.createNetCDF(output[var]['file_name'], list(var), list(output[var]['unit']))
 
     # class (country) ids
     uniqueIDsFile = "/projects/0/dfguu/users/edwin/data/country_shp_from_tianyi/World_Polys_High.map"
