@@ -23,27 +23,31 @@ class MakingNetCDF():
         cloneMap = pcr.readmap(cloneMapFile)
         cloneMap = pcr.boolean(1.0)
         
-        # properties of the clone map
-        # - number of rows and columns
-        self.nrRows       = np.round(pcr.clone().nrRows())    
-        self.nrCols       = np.round(pcr.clone().nrCols())  
-        # - upper right coordinate, unit: arc degree ; must be integer (without decimals)
-        self.minLongitude = np.round(pcr.clone().west() , 0)         
-        self.maxLatitude  = np.round(pcr.clone().north(), 0)
-        # - cell resolution, unit: arc degree
-        self.cellSize     = pcr.clone().cellSize()
-        if cellSizeInArcMinutes != None: self.cellSize = cellSizeInArcMinutes / 60.0 
-        # - lower right coordinate, unit: arc degree ; must be integer (without decimals)
-        self.maxLongitude = np.round(self.minLongitude + self.cellSize*self.nrCols, 0)         
-        self.minLatitude  = np.round(self.maxLatitude  - self.cellSize*self.nrRows, 0)
-        
-        # latitudes and longitudes for netcdf files
-        latMin = self.minLatitude  + self.cellSize / 2
-        latMax = self.maxLatitude  - self.cellSize / 2
-        lonMin = self.minLongitude + self.cellSize / 2
-        lonMax = self.maxLongitude - self.cellSize / 2
-        self.longitudes = np.arange(lonMin,lonMax+self.cellSize, self.cellSize)
-        self.latitudes=   np.arange(latMax,latMin-self.cellSize,-self.cellSize)
+        # latitudes and longitudes
+        self.latitudes  = np.unique(pcr.pcr2numpy(pcr.ycoordinate(cloneMap), vos.MV))[::-1]
+        self.longitudes = np.unique(pcr.pcr2numpy(pcr.xcoordinate(cloneMap), vos.MV))
+
+        #~ # properties of the clone map
+        #~ # - number of rows and columns
+        #~ self.nrRows       = np.round(pcr.clone().nrRows())    
+        #~ self.nrCols       = np.round(pcr.clone().nrCols())  
+        #~ # - upper right coordinate, unit: arc degree ; must be integer (without decimals)
+        #~ self.minLongitude = np.round(pcr.clone().west() , 0)         
+        #~ self.maxLatitude  = np.round(pcr.clone().north(), 0)
+        #~ # - cell resolution, unit: arc degree
+        #~ self.cellSize     = pcr.clone().cellSize()
+        #~ if cellSizeInArcMinutes != None: self.cellSize = cellSizeInArcMinutes / 60.0 
+        #~ # - lower right coordinate, unit: arc degree ; must be integer (without decimals)
+        #~ self.maxLongitude = np.round(self.minLongitude + self.cellSize*self.nrCols, 0)         
+        #~ self.minLatitude  = np.round(self.maxLatitude  - self.cellSize*self.nrRows, 0)
+        #~ 
+        #~ # latitudes and longitudes for netcdf files
+        #~ latMin = self.minLatitude  + self.cellSize / 2
+        #~ latMax = self.maxLatitude  - self.cellSize / 2
+        #~ lonMin = self.minLongitude + self.cellSize / 2
+        #~ lonMax = self.maxLongitude - self.cellSize / 2
+        #~ self.longitudes = np.arange(lonMin,lonMax+self.cellSize, self.cellSize)
+        #~ self.latitudes=   np.arange(latMax,latMin-self.cellSize,-self.cellSize)
         
         # netCDF format and attributes:
         self.format = 'NETCDF4'
