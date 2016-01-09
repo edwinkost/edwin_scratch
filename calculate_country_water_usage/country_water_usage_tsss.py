@@ -241,8 +241,7 @@ if __name__ == "__main__":
 
         # reading pcraster files:
         for var in inputFiles.keys():        
-            print inputFiles[var]['file_name']
-            output[var]['pcr_value'] = vos.netcdf2PCRobjClone(ncFile = inputFiles[var]['file_name'],\
+            output[var]['pcr_value'] = vos.netcdf2PCRobjClone(ncFile = inputFiles[var],\
                                                               varName = "Automatic",\
                                                               dateInput = dulldate,
                                                               useDoy = None,
