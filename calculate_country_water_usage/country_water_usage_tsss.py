@@ -89,7 +89,7 @@ class MakingNetCDF():
         lon[:]= self.longitudes
 
         shortVarName = varName
-        var= rootgrp.createVariable(shortVarName,'f4',('time','lat','lon',) ,fill_value=vos.MV,zlib=False)
+        var= rootgrp.createVariable(shortVarName,'f4',('time','lat','lon',) ,fill_value=vos.MV,zlib=True)
         var.standard_name = shortVarName
         var.long_name = shortVarName
         var.units = varUnit
@@ -119,10 +119,8 @@ class MakingNetCDF():
 if __name__ == "__main__":
     
     # clone, landmask and cell area files
-    #~ landmask05minFile    = "/projects/0/dfguu/data/hydroworld/PCRGLOBWB20/input5min/routing/lddsound_05min.map"
-    
-    landmask05minFile    = "/projects/0/dfguu/data/hydroworld/others/RhineMeuse/RhineMeuse05min.landmask.map"
-    
+    landmask05minFile    = "/projects/0/dfguu/data/hydroworld/PCRGLOBWB20/input5min/routing/lddsound_05min.map"
+    #~ landmask05minFile = "/projects/0/dfguu/data/hydroworld/others/RhineMeuse/RhineMeuse05min.landmask.map"
     cloneMapFileName     = landmask05minFile 
     cellSizeInArcMinutes = 5.0 
     cellArea05minFile    = "/projects/0/dfguu/data/hydroworld/PCRGLOBWB20/input5min/routing/cellsize05min.correct.map"
@@ -157,7 +155,7 @@ if __name__ == "__main__":
     inputFiles['area_equipped_with_irrigation'] = "/projects/0/dfguu/data/hydroworld/PCRGLOBWB20/input5min/landSurface/waterDemand/irrigated_areas/irrigationArea05ArcMin.nc"
 
     # output that will be calculated 
-    outputDirectory = "/scratch-shared/edwin/water_use/"
+    outputDirectory = "/scratch-shared/edwin/country_water_use/"
     output = {}
     variable_names  = inputFiles.keys()
     variable_names += ['irrigation_water_consumption']
@@ -167,7 +165,6 @@ if __name__ == "__main__":
         output[var]['unit']      = "km3.year-1"
         output[var]['pcr_value'] = None
         if var == 'area_equipped_with_irrigation': output[var]['unit'] = "ha"
-        if var == 'class_id': output[var]['class_id'] = "-"
         
     # making output and temporary directories
     if os.path.exists(outputDirectory):
@@ -175,6 +172,9 @@ if __name__ == "__main__":
     os.makedirs(outputDirectory)
     tmp_directory = outputDirectory + "/tmp/"
     os.makedirs(tmp_directory)
+    # - table directory
+    table_directory = outputDirectory + "/table/"
+    os.makedirs(table_directory)
     
     # attribute for netCDF files 
     attributeDictionary = {}
@@ -216,6 +216,7 @@ if __name__ == "__main__":
         uniqueIDs = pcr.cover(uniqueIDs, pcr.windowmajority(uniqueIDs, 0.5))
     # - use only cells within the landmask
     uniqueIDs = pcr.ifthen(landmask, uniqueIDs)
+    pcr.report(uniqueIDs_sample, "class_ids.map")                                
     
     # cell area at 5 arc min resolution
     cellArea = vos.readPCRmapClone(cellArea05minFile,
@@ -295,10 +296,11 @@ if __name__ == "__main__":
         # write class values to a table
         cmd  = 'map2col -x 1 -y 2 -m NA sample.ids'
         for var in output.keys():
-            cmd += " " + str(output[var]['file_name'] + ".tmp")
-        cmd += " " + "summary_" + fulldate + ".txt"
+            cmd += " " + str(tmp_directory) + "/" + str(output[var]['file_name'] + ".tmp")
+        cmd += " " + str(outputDirectory) + "/" + table_directory + "summary_" + fulldate + ".txt"
         print cmd
         os.system(cmd)
         
         # remove all temporary files
+        cmd = 'rm -r '+ "/*.tmp"
         
