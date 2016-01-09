@@ -166,7 +166,7 @@ if __name__ == "__main__":
     if os.path.exists(outputDirectory):
         shutil.rmtree(outputDirectory)
     os.makedirs(outputDirectory)
-    tmp_directory = out_directory+"/tmp/"
+    tmp_directory = outputDirectory + "/tmp/"
     os.makedirs(tmp_directory)
     
     # attribute for netCDF files 
