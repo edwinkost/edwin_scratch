@@ -205,7 +205,7 @@ if __name__ == "__main__":
     landmask = pcr.cover(landmask, pcr.defined(uniqueIDs))
     
     # extending class (country) ids
-    max_step = max_step
+    max_step = 5
     for i in range(1, max_step+1, 1):
         cmd = "Extending class ; step "+str(i)+" from " + str(max_step)
         print(cmd)
