@@ -187,7 +187,7 @@ if __name__ == "__main__":
                              cellSizeInArcMinutes = cellSizeInArcMinutes)
     # making netcdf files:
     for var in variable_names:
-        tssNetCDF.createNetCDF(output['file_name'], var, output['unit'])
+        tssNetCDF.createNetCDF(output[var]['file_name'], var, output[var]['unit'])
 
     # class (country) ids
     uniqueIDsFile = "/projects/0/dfguu/users/edwin/data/country_shp_from_tianyi/World_Polys_High.map"
