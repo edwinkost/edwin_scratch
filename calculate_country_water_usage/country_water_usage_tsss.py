@@ -119,8 +119,8 @@ class MakingNetCDF():
 if __name__ == "__main__":
     
     # clone, landmask and cell area files
-    landmask05minFile    = "/projects/0/dfguu/data/hydroworld/PCRGLOBWB20/input5min/routing/lddsound_05min.map"
-    #~ landmask05minFile = "/projects/0/dfguu/data/hydroworld/others/RhineMeuse/RhineMeuse05min.landmask.map"
+    #~ landmask05minFile    = "/projects/0/dfguu/data/hydroworld/PCRGLOBWB20/input5min/routing/lddsound_05min.map"
+    landmask05minFile = "/projects/0/dfguu/data/hydroworld/others/RhineMeuse/RhineMeuse05min.landmask.map"
     cloneMapFileName     = landmask05minFile 
     cellSizeInArcMinutes = 5.0 
     cellArea05minFile    = "/projects/0/dfguu/data/hydroworld/PCRGLOBWB20/input5min/routing/cellsize05min.correct.map"
@@ -209,14 +209,14 @@ if __name__ == "__main__":
     landmask = pcr.cover(landmask, pcr.defined(uniqueIDs))
     
     # extending class (country) ids
-    max_step = 5
+    max_step = 7
     for i in range(1, max_step+1, 1):
         cmd = "Extending class: step "+str(i)+" from " + str(max_step)
         print(cmd)
         uniqueIDs = pcr.cover(uniqueIDs, pcr.windowmajority(uniqueIDs, 0.5))
     # - use only cells within the landmask
     uniqueIDs = pcr.ifthen(landmask, uniqueIDs)
-    pcr.report(uniqueIDs_sample, "class_ids.map")                                
+    pcr.report(uniqueIDs, "class_ids.map")                                
     
     # cell area at 5 arc min resolution
     cellArea = vos.readPCRmapClone(cellArea05minFile,
