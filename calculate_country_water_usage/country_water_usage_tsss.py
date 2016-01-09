@@ -293,7 +293,7 @@ if __name__ == "__main__":
             tssNetCDF.writePCR2NetCDF(ncFileName, var, varField, timeStamp, posCnt = index - 1)
             
         # write class values to a table
-        cmd  = 'map2col -x 1 -y 2 -m NA sample.ids'
+        cmd  = 'map2col -x 1 -y 2 sample.ids'
         cmd += " " + str(output[var]['file_name'] + ".map")
         cmd += " " + "summary_" + fulldate + ".txt"
         print cmd
