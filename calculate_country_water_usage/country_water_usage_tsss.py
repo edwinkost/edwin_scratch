@@ -172,6 +172,9 @@ if __name__ == "__main__":
     if os.path.exists(outputDirectory):
         shutil.rmtree(outputDirectory)
     os.makedirs(outputDirectory)
+    # - moving to the output directory
+    os.chdir(outputDirectory)
+    # - temporary directory
     tmp_directory = outputDirectory + "/tmp/"
     os.makedirs(tmp_directory)
     # - table directory
@@ -218,16 +221,13 @@ if __name__ == "__main__":
         uniqueIDs = pcr.cover(uniqueIDs, pcr.windowmajority(uniqueIDs, 0.5))
     # - use only cells within the landmask
     uniqueIDs = pcr.ifthen(landmask, uniqueIDs)
-    pcr.report(uniqueIDs, "class_ids.map")                                
+    pcr.report(uniqueIDs, "/class_ids.map")                                
     
     # cell area at 5 arc min resolution
     cellArea = vos.readPCRmapClone(cellArea05minFile,
                                    cloneMapFileName, tmp_directory)
     cellArea = pcr.ifthen(landmask, cellArea)
     
-    # moving to the output directory
-    os.chdir(outputDirectory)
-
     # get a sample cell for every id
     x_min_for_each_id = pcr.areaminimum(pcr.xcoordinate(pcr.boolean(1.0)), uniqueIDs)
     y_min_for_each_id = pcr.areaminimum(pcr.ycoordinate(pcr.boolean(1.0)), uniqueIDs)
