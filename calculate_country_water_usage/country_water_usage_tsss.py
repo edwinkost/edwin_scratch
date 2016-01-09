@@ -207,7 +207,7 @@ if __name__ == "__main__":
     # extending class (country) ids
     max_step = 5
     for i in range(1, max_step+1, 1):
-        cmd = "Extending class ; step "+str(i)+" from " + str(max_step)
+        cmd = "Extending class: step "+str(i)+" from " + str(max_step)
         print(cmd)
         uniqueIDs = pcr.cover(uniqueIDs, pcr.windowmajority(uniqueIDs, 0.5))
     # - use only cells within the landmask
@@ -243,7 +243,7 @@ if __name__ == "__main__":
         for var in inputFiles.keys():        
             output[var]['pcr_value'] = vos.netcdf2PCRobjClone(ncFile = inputFiles[var],\
                                                               varName = "Automatic",\
-                                                              dateInput = dulldate,
+                                                              dateInput = fulldate,
                                                               useDoy = None,
                                                               cloneMapFileName  = cloneMapFileName,
                                                               LatitudeLongitude = True,
