@@ -290,17 +290,33 @@ if __name__ == "__main__":
             tssNetCDF.writePCR2NetCDF(ncFileName, var, varField, timeStamp, posCnt = index - 1)
             
             # plot the values at sample cells only and write values to a temporary pcraster map
-            pcrFileName = output[var]['file_name'] + ".tmp"
+            pcrFileName = str(tmp_directory) + "/" + str(var) + ".tmp"
             pcr.report(pcr.ifthen(pcr.defined(uniqueIDs_sample), pcrValue), pcrFileName)
 
         # write class values to a table
-        cmd  = 'map2col -x 1 -y 2 -m NA sample.ids'
+        # - command line to call map2col
+        cmd    = 'map2col -x 1 -y 2 -m NA sample.ids'
+        # - header for the table
+        header = "x y class_id"
+        # - txt file that contains the table
+        txt_file = open(table_directory + "/" + "summary_" + fulldate + "txt", "w")
         for var in output.keys():
-            cmd += " " + str(tmp_directory) + "/" + str(output[var]['file_name'] + ".tmp")
-        cmd += " " + str(outputDirectory) + "/" + table_directory + "summary_" + fulldate + ".txt"
+            header += " " + str(var]
+            cmd    += " " + str(tmp_directory) + "/" + str(var] + ".tmp"
+        cmd += " " + str(tmp_directory) + "/" + "summary_" + fulldate + "txt.tmp"
         print cmd
         os.system(cmd)
+        # - add header to txt file
+        header += "\n" 
+        txt_file.write(header)
+        # - add map2col output to the txt_file
+        map2col_file = open(tmp_directory + "/summary_" + fulldate + "txt", "r")
+        txt_file.write(map2col_file.read)
+        # - close all open txt files
+        txt_file.close()
+        map2col_file.close()
         
         # remove all temporary files
-        cmd = 'rm -r '+ "/*.tmp"
+        cmd = 'rm -r '+ tmp_directory + "/*"
+        os.system(cmd)
         
