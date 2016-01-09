@@ -127,7 +127,7 @@ if __name__ == "__main__":
     endYear = 2010
 
     # input files
-    inputDirectory  = "/data/hydroworld/basedata/human/water_demand_wada_et_al_2014/"
+    inputDirectory  = "/projects/0/dfguu/users/edwin/05min_runs_rerun_for_WRI_version_27_april_2015/1959_to_2010/global/netcdf/"
     inputFiles = {}
     inputFiles["domestic_water_consumption"   ] = inputDirectory + "/" + "domesticWaterConsumptionVolume_annuaTot_output.nc"
     inputFiles["domestic_water_withdrawal"    ] = inputDirectory + "/" + "domesticWaterWithdrawalVolume_annuaTot_output.nc"
