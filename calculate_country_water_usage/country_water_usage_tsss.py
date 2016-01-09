@@ -303,14 +303,14 @@ if __name__ == "__main__":
         for var in output.keys():
             header += " " + str(var)
             cmd    += " " + str(tmp_directory) + "/" + str(var) + ".tmp"
-        cmd += " " + str(tmp_directory) + "/" + "summary_" + fulldate + "txt.tmp"
+        cmd += " " + str(tmp_directory) + "/" + "summary_" + fulldate + ".txt.tmp"
         print cmd
         os.system(cmd)
         # - add header to txt file
         header += "\n" 
         txt_file.write(header)
         # - add map2col output to the txt_file
-        map2col_file = open(tmp_directory + "/summary_" + fulldate + "txt", "r")
+        map2col_file = open(tmp_directory+"/" + "summary_" + fulldate + ".txt.tmp", "r")
         txt_file.write(map2col_file.read)
         # - close all open txt files
         txt_file.close()
