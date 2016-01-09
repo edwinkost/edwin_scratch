@@ -242,7 +242,7 @@ if __name__ == "__main__":
                                                               cloneMapFileName, fulldate)
             
         # calculating irrigation water consumption
-        output['irrigation_water_consumption']['pcr_value'] = output['evaporation_from_irrigation']['pcr_value'] * 
+        output['irrigation_water_consumption']['pcr_value'] = output['evaporation_from_irrigation']['pcr_value'] * \
                                                               vos.getValDivZero(output['irrigation_water_withdrawal']['pcr_value'], \
                                                                                 output['irrigation_water_withdrawal']['pcr_value'] +\
                                                                                 output['precipitation_at_irrigation']['pcr_value'])
@@ -258,6 +258,7 @@ if __name__ == "__main__":
             
             # write values to a pcraster map
             pcrFileName = output[var]['file_name'] + ".map"
+            pcr.report(pcrValue, pcrFileName)
 
             # write values to a netcdf file
             ncFileName = output[var]['file']
