@@ -236,7 +236,7 @@ if __name__ == "__main__":
         # time stamp and index for netcdf files:
         index = index + 1
         timeStamp = datetime.datetime(int(iYear), int(12), int(31), int(0))
-        fulldate = '%4i-%02i-%02i'  %(int(iYear), int(12), int(1))
+        fulldate = '%4i-%02i-%02i'  %(int(iYear), int(12), int(31))
         print fulldate
 
         # reading pcraster files:
