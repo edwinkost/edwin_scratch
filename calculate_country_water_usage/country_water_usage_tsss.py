@@ -282,7 +282,7 @@ if __name__ == "__main__":
             pcr.report(pcrValue, pcrFileName)
 
             # write values to a netcdf file
-            ncFileName = output[var]['file']
+            ncFileName = output[var]['file_name']
             varField = pcr.pcr2numpy(pcrValue, vos.MV)
             tssNetCDF.writePCR2NetCDF(ncFileName, var, varField, timeStamp, posCnt = index - 1)
             
