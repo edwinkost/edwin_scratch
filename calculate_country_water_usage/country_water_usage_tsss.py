@@ -302,7 +302,7 @@ if __name__ == "__main__":
         txt_file = open(table_directory + "/" + "summary_" + fulldate + "txt", "w")
         for var in output.keys():
             header += " " + str(var)
-            cmd    += " " + str(tmp_directory) + "/" + str(var] + ".tmp"
+            cmd    += " " + str(tmp_directory) + "/" + str(var) + ".tmp"
         cmd += " " + str(tmp_directory) + "/" + "summary_" + fulldate + "txt.tmp"
         print cmd
         os.system(cmd)
