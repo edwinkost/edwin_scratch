@@ -119,14 +119,17 @@ class MakingNetCDF():
 if __name__ == "__main__":
     
     # clone, landmask and cell area files
-    #~ landmask05minFile    = "/projects/0/dfguu/data/hydroworld/PCRGLOBWB20/input5min/routing/lddsound_05min.map"
-    landmask05minFile = "/projects/0/dfguu/data/hydroworld/others/RhineMeuse/RhineMeuse05min.landmask.map"
+    landmask05minFile    = "/projects/0/dfguu/data/hydroworld/PCRGLOBWB20/input5min/routing/lddsound_05min.map"
+    #~ landmask05minFile = "/projects/0/dfguu/data/hydroworld/others/RhineMeuse/RhineMeuse05min.landmask.map"
     cloneMapFileName     = landmask05minFile 
     cellSizeInArcMinutes = 5.0 
     cellArea05minFile    = "/projects/0/dfguu/data/hydroworld/PCRGLOBWB20/input5min/routing/cellsize05min.correct.map"
     # set clone
     pcr.setclone(landmask05minFile)
     
+    # output directory
+    outputDirectory = "/scratch-shared/edwin/country_water_use_for_WRI/"
+
     # start year and end year
     staYear = 1960
     endYear = 2010
@@ -155,7 +158,6 @@ if __name__ == "__main__":
     inputFiles['area_equipped_with_irrigation'] = "/projects/0/dfguu/data/hydroworld/PCRGLOBWB20/input5min/landSurface/waterDemand/irrigated_areas/irrigationArea05ArcMin.nc"
 
     # output that will be calculated 
-    outputDirectory = "/scratch-shared/edwin/country_water_use/"
     output = {}
     variable_names  = inputFiles.keys()
     variable_names += ['irrigation_water_consumption']
@@ -209,7 +211,7 @@ if __name__ == "__main__":
     landmask = pcr.cover(landmask, pcr.defined(uniqueIDs))
     
     # extending class (country) ids
-    max_step = 7
+    max_step = 5
     for i in range(1, max_step+1, 1):
         cmd = "Extending class: step "+str(i)+" from " + str(max_step)
         print(cmd)
