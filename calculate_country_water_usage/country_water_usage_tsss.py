@@ -55,7 +55,7 @@ class MakingNetCDF():
         else:
             self.attributeDictionary = attribute
 
-    def createNetCDF(self,ncFileName,varNames,varUnits):
+    def createNetCDF(self,ncFileName,varName,varUnit):
 
         rootgrp= nc.Dataset(ncFileName,'w',format= self.format)
 
@@ -84,12 +84,11 @@ class MakingNetCDF():
         lat[:]= self.latitudes
         lon[:]= self.longitudes
 
-        for iVar in range(0,len(varNames)):      
-            shortVarName = varNames[iVar]
-            var= rootgrp.createVariable(shortVarName,'f4',('time','lat','lon',) ,fill_value=vos.MV,zlib=False)
-            var.standard_name = shortVarName
-            var.long_name = shortVarName
-            var.units = varUnits[iVar]
+        shortVarName = varName
+        var= rootgrp.createVariable(shortVarName,'f4',('time','lat','lon',) ,fill_value=vos.MV,zlib=False)
+        var.standard_name = shortVarName
+        var.long_name = shortVarName
+        var.units = varUnit
 
         attributeDictionary = self.attributeDictionary
         for k, v in attributeDictionary.items():
@@ -190,7 +189,7 @@ if __name__ == "__main__":
         print var
         print output[var]['file_name']
         print output[var]['unit']
-        tssNetCDF.createNetCDF(output[var]['file_name'], list(var), list(output[var]['unit']))
+        tssNetCDF.createNetCDF(output[var]['file_name'], var, output[var]['unit'])
 
     # class (country) ids
     uniqueIDsFile = "/projects/0/dfguu/users/edwin/data/country_shp_from_tianyi/World_Polys_High.map"
