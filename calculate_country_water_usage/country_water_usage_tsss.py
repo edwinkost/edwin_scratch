@@ -283,18 +283,21 @@ if __name__ == "__main__":
             else:
                 pcrValue = pcr.areatotal(pcrValue, uniqueIDs)
             
-            # write values to a pcraster map
-            pcrFileName = output[var]['file_name'] + ".map"
-            pcr.report(pcrValue, pcrFileName)
-
             # write values to a netcdf file
             ncFileName = output[var]['file_name']
             varField = pcr.pcr2numpy(pcrValue, vos.MV)
             tssNetCDF.writePCR2NetCDF(ncFileName, var, varField, timeStamp, posCnt = index - 1)
             
+            # plot the values at sample cells only and write values to a temporary pcraster map
+            pcrFileName = output[var]['file_name'] + ".tmp"
+            pcr.report(pcr.ifthen(pcr.defined(uniqueIDs_sample), pcrValue), pcrFileName)
+
         # write class values to a table
-        cmd  = 'map2col -x 1 -y 2 sample.ids'
-        cmd += " " + str(output[var]['file_name'] + ".map")
+        cmd  = 'map2col -x 1 -y 2 -m NA sample.ids'
+        cmd += " " + str(output[var]['file_name'] + ".tmp")
         cmd += " " + "summary_" + fulldate + ".txt"
         print cmd
         os.system(cmd)
+        
+        # remove all temporary files
+        
