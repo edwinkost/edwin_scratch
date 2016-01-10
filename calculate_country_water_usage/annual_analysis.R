@@ -105,7 +105,8 @@ final_table = cbind(selected_table,
 
 # write the final table to a txt file
 output_file_name = paste(output_folder, "/", as.character(variable_names[i_variable]), ".txt", sep = "")
-write.table(final_table, file = output_file_name, sep = ";", row.names = FALSE)
+print output_file_name
+write.table(final_table, output_file_name, sep = ";", row.names = FALSE)
 
 
 
