@@ -322,7 +322,7 @@ if __name__ == "__main__":
         txt_file.close()
         map2col_file.close()
         
-        #~ # remove all temporary files
-        #~ cmd = 'rm -r '+ tmp_directory + "/*"
-        #~ os.system(cmd)
+        # remove all temporary files
+        cmd = 'rm -r '+ tmp_directory + "/*"
+        os.system(cmd)
         
