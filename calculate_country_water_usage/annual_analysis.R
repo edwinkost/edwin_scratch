@@ -105,8 +105,9 @@ final_table = cbind(selected_table,
                     lm_slope, lm_r_squared, lm_adj_r_squared, 
                     average_1981_to_1990, std_dev_1981_to_1990, 
                     average_1981_to_1990, std_dev_1991_to_2000, 
-                    average_1981_to_1990, std_dev_2001_to_2010,)
+                    average_1981_to_1990, std_dev_2001_to_2010)
 # sort table 
+final_table[order(as.numeric(final_table$FID)), ]
 
 # write the final table to a txt file
 output_file_name = paste(output_folder, "/", as.character(variable_names[i_variable]), ".txt", sep = "")
