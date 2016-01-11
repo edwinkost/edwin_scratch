@@ -23,6 +23,7 @@ variable_names = names(first_year_table)[4:length(first_year_table)]
 shp_dbf_table = read.dbf("/projects/0/dfguu/users/edwin/data/country_shp_from_tianyi/World_Polys_High.dbf")
 FID = as.character(seq(0, length(shp_dbf_table$WB_NAMES) - 1, 1))
 shp_dbf_table = cbind(FID, as.character(shp_dbf_table))
+shp_dbf_table[] = lapply(shp_dbf_table, as.character)
 
 # arranging tables 
 for (i_variable in 1:length(variable_names)){
