@@ -98,7 +98,6 @@ end_col = which(names(selected_table) == as.character(2010))
 average_2001_to_2010 = apply(selected_table[,sta_col:end_col], 1, mean)
 std_dev_2001_to_2010 = apply(selected_table[,sta_col:end_col], 1, sd)
 
-
 # merge the aforementioned variables to the final table
 final_table = cbind(selected_table, 
                     average, std_dev, cor_pearson, cor_spearman, cor_kendall, cor_pearson__p_value, cor_spearman_p_value, cor_kendall__p_value, 
@@ -114,8 +113,7 @@ output_file_name = paste(output_folder, "/", as.character(variable_names[i_varia
 print(output_file_name)
 write.table(final_table, output_file_name, sep = ";", row.names = FALSE)
 
+# SOMETHING WRONG !!! We have to make time series plot !!!
 
 
 } # end for loop for i_variable  
-
-
