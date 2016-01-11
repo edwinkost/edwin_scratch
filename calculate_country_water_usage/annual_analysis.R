@@ -23,7 +23,6 @@ variable_names = names(first_year_table)[4:length(first_year_table)]
 shp_dbf_table = read.dbf("/projects/0/dfguu/users/edwin/data/country_shp_from_tianyi/World_Polys_High.dbf")
 FID = as.character(seq(0, length(shp_dbf_table$WB_NAMES) - 1, 1))
 shp_dbf_table = cbind(FID, as.character(shp_dbf_table))
-shp_dbf_table[] = lapply(shp_dbf_table, as.character)
 
 # arranging tables 
 for (i_variable in 1:length(variable_names)){
@@ -103,7 +102,9 @@ std_dev_2001_to_2010 = apply(selected_table[,sta_col:end_col], 1, sd)
 final_table = cbind(selected_table, 
                     average, std_dev, cor_pearson, cor_spearman, cor_kendall, cor_pearson__p_value, cor_spearman_p_value, cor_kendall__p_value, 
                     lm_slope, lm_r_squared, lm_adj_r_squared)
-
+                    
+final_table[is.na(final_table)] = "NA"
+final_table[is.nan(final_table)] = "NA"
 
 # write the final table to a txt file
 output_file_name = paste(output_folder, "/", as.character(variable_names[i_variable]), ".txt", sep = "")
