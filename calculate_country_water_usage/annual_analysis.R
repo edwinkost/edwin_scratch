@@ -4,7 +4,7 @@ require(foreign)
 
 # output folder
 output_folder = "/projects/0/dfguu/users/edwin/05min_runs_rerun_for_WRI_version_27_april_2015/1959_to_2010/global/analysis/country_water_use_for_WRI/table_summary/"
-output_folder = "//scratch-shared/edwin/table_summary_country-water_use/"
+output_folder = "//scratch-shared/edwin/table_summary_country_water_use/"
 dir.create(output_folder)
 
 # table folder
@@ -22,7 +22,7 @@ variable_names = names(first_year_table)[4:length(first_year_table)]
 # get the class from the shape file
 shp_dbf_table = read.dbf("/projects/0/dfguu/users/edwin/data/country_shp_from_tianyi/World_Polys_High.dbf")
 FID = as.character(seq(0, length(shp_dbf_table$WB_NAMES) - 1, 1))
-shp_dbf_table = cbind(FID, as.character(shp_dbf_table))
+shp_dbf_table = cbind(FID, shp_dbf_table)
 
 # arranging tables 
 for (i_variable in 1:length(variable_names)){
