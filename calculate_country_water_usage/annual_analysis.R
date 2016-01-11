@@ -104,8 +104,8 @@ final_table = cbind(selected_table,
                     average, std_dev, cor_pearson, cor_spearman, cor_kendall, cor_pearson__p_value, cor_spearman_p_value, cor_kendall__p_value, 
                     lm_slope, lm_r_squared, lm_adj_r_squared, 
                     average_1981_to_1990, std_dev_1981_to_1990, 
-                    average_1981_to_1990, std_dev_1991_to_2000, 
-                    average_1981_to_1990, std_dev_2001_to_2010)
+                    average_1991_to_2000, std_dev_1991_to_2000, 
+                    average_2001_to_2010, std_dev_2001_to_2010)
 # sort table 
 final_table[order(as.numeric(as.character(final_table$FID))), ]
 
