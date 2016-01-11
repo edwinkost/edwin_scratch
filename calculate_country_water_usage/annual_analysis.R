@@ -104,7 +104,7 @@ final_table = cbind(selected_table,
                     average, std_dev, cor_pearson, cor_spearman, cor_kendall, cor_pearson__p_value, cor_spearman_p_value, cor_kendall__p_value, 
                     lm_slope, lm_r_squared, lm_adj_r_squared)
                     
-final_table[is.na(final_table)] = "NA"
+#~ final_table[is.na(final_table)] = "NA"
 
 # write the final table to a txt file
 output_file_name = paste(output_folder, "/", as.character(variable_names[i_variable]), ".txt", sep = "")
