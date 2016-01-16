@@ -3,12 +3,11 @@ require(ggplot2)
 require(foreign)
 
 # output folder
-output_folder = "/projects/0/dfguu/users/edwin/05min_runs_rerun_for_WRI_version_27_april_2015/1959_to_2010/global/analysis/country_water_use_for_WRI/table_summary/"
-output_folder = "//scratch-shared/edwin/table_summary_country_water_use/"
+output_folder = "/scratch-shared/edwin/country_water_use_for_WRI_correct/table_summary/"
 dir.create(output_folder)
 
 # table folder
-table_folder  = "/projects/0/dfguu/users/edwin/05min_runs_rerun_for_WRI_version_27_april_2015/1959_to_2010/global/analysis/country_water_use_for_WRI/table/"
+table_folder  = "/scratch-shared/edwin/country_water_use_for_WRI_correct/table/"
 
 # years used
 starting_year = 1960 
