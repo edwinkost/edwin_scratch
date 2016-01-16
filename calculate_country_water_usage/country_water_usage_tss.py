@@ -276,7 +276,7 @@ if __name__ == "__main__":
         
         # convert some values from m to volume
         for var in [
-                    "total_evaporation", "total_groundwater_abstraction". 
+                    "total_evaporation", "total_groundwater_abstraction",\
                     "total_groundwater_recharge", "total_runoff"]:
             output[var]['pcr_value'] = output[var]['pcr_value'] * cellArea
 
