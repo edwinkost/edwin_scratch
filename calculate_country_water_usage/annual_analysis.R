@@ -113,7 +113,4 @@ output_file_name = paste(output_folder, "/", as.character(variable_names[i_varia
 print(output_file_name)
 write.table(final_table, output_file_name, sep = ";", row.names = FALSE)
 
-# SOMETHING WRONG !!! We have to make time series plot !!!
-
-
 } # end for loop for i_variable  
