@@ -11,14 +11,14 @@ aquifer_thickness_file_name = "/projects/0/dfguu/users/edwin/data/aquifer_proper
 aquifer_thickness = pcr.readmap(aquifer_thickness_file_name)
 
 # extent of confining layer
-extent_of_confining_layer_file_name = "/home/edwin/data/inge_aquifer_parameters/conflayers3.map"
+extent_of_confining_layer_file_name = "/home/edwin/data/inge_aquifer_parameters/conflayers4.map"
 confining_layer_extent = pcr.boolean(pcr.readmap(extent_of_confining_layer_file_name))
 
-# thickness of confining layer = 10 percent from the first 500 m
-confining_layer_thickness = pcr.ifthen(confining_layer_extent, pcr.min(500.0, aquifer_thickness)) * 0.10
+# thickness of confining layer = 10 percent from the first 250 m
+confining_layer_thickness = pcr.ifthen(confining_layer_extent, pcr.min(250.0, aquifer_thickness)) * 0.10
 
 # extrapolate with window size 0.5 arc degree
-confining_layer_thickness = pcr.cover(confining_layer_thickness, pcr.windowaverage(confining_layer_thickness, 0.5))
+confining_layer_thickness = pcr.cover(confining_layer_thickness, pcr.windowaverage(confining_layer_thickness, 0.25))
 confining_layer_thickness = pcr.cover(confining_layer_thickness, 0.0)
 confining_layer_thickness_output_filename = "/home/edwin/data/inge_aquifer_parameters/confining_layer_thickness.map"
 pcr.report(confining_layer_thickness, confining_layer_thickness_output_filename)
