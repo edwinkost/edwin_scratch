@@ -11,7 +11,7 @@ aquifer_thickness_file_name = "/projects/0/dfguu/users/edwin/data/aquifer_proper
 aquifer_thickness = pcr.readmap(aquifer_thickness_file_name)
 
 # extent of confining layer
-extent_of_confining_layer_file_name = "/home/edwin/data/inge_aquifer_parameters/conflayers4.map"
+extent_of_confining_layer_file_name = "/home/edwin/data/inge_aquifer_parameters/conflayers3.map"
 confining_layer_extent = pcr.boolean(pcr.readmap(extent_of_confining_layer_file_name))
 
 # thickness of confining layer = 10 percent from the first 500 m
