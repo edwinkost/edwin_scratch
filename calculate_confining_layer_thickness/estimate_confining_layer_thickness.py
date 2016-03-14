@@ -20,6 +20,9 @@ confining_layer_thickness = pcr.ifthen(confining_layer_extent, pcr.min(500.0, aq
 # extrapolate
 confining_layer_thickness = pcr.cover(confining_layer_thickness, pcr.windowaverage(pcr.cover(confining_layer_thickness, 0.0), 0.05))
 confining_layer_thickness = pcr.cover(confining_layer_thickness, pcr.windowaverage(pcr.cover(confining_layer_thickness, 0.0), 0.05))
+confining_layer_thickness = pcr.cover(confining_layer_thickness, pcr.windowaverage(pcr.cover(confining_layer_thickness, 0.0), 0.05))
+confining_layer_thickness = pcr.cover(confining_layer_thickness, pcr.windowaverage(pcr.cover(confining_layer_thickness, 0.0), 0.05))
+confining_layer_thickness = pcr.cover(confining_layer_thickness, pcr.windowaverage(pcr.cover(confining_layer_thickness, 0.0), 0.05))
 confining_layer_thickness = pcr.cover(confining_layer_thickness, 0.0)
 confining_layer_thickness_output_filename = "/home/edwin/data/inge_aquifer_parameters/confining_layer_thickness.map"
 pcr.report(confining_layer_thickness, confining_layer_thickness_output_filename)
