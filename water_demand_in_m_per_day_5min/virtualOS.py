@@ -22,6 +22,8 @@ import pcraster as pcr
 MV = 1e20
 smallNumber = 1E-39
 
+# test
+
 def netcdf2PCRobjCloneWithoutTime(ncFile,varName,
                                   cloneMapFileName  = None,\
                                   LatitudeLongitude = False,\
