@@ -85,8 +85,7 @@ predictors["ec"]                   = dataset["ec"]
 
 # fit the model using all data
 mlr_model = LinearRegression()
-mlr_model.fit(predictors,
- target)
+mlr_model.fit(predictors, target)
 
 
 # intercept and regression coefficients
@@ -94,27 +93,6 @@ print("intercept and regression coefficients (using all data)")
 print(mlr_model.intercept_)
 print(mlr_model.coef_)
 
-# get the prediction values (fitted values)
-predictions = mlr_model.predict(predictors)
-
-# calculate also the prediction errors
-errors = predictions - target
-
-# store the prediction and error in a csv file
-predictions_and_errors = pd.DataFrame(\
-                             {
-                              'measurement'    : pd.Series(dtype='float'),
-                              'prediction'     : pd.Series(dtype='float'),
-                              'error'          : pd.Series(dtype='float')
-                              })
-for i_row in range(len(target)): 
-    predictions_and_errors.loc[i_row] = {
-                              'measurement'    : target[i_row],
-                              'prediction'     : predictions[i_row],
-                              'error'          : errors[i_row]
-                              }
-# write data frame to a csv file
-predictions_and_errors.to_csv("predictions_and_erros.csv", index = False)  
 
 # get performance values
 r_squared_all, adj_r_squared_all, rmse_all, mae_all = calculate_performance(predictors, target, mlr_model) 
@@ -181,25 +159,7 @@ result_df_all.loc[len(result_df_all)] = new_row
 # write data frame to a csv file
 result_df_all.to_csv("cv_result_all_example_uk.csv"  , index = False)  
 
+
+print(mlr_model.summary())
                          
                              
-# get the predicted value
-predictions = pd.DataFrame(mlr_model.predict(predictors))
-print(predictions)
-
-
-# create scatter plots between 'measurements (y)' and 'predicted values (x)'
-plt.figure(figsize=(8, 6))
-plt.scatter(x = target, y = predictions)
-plt.title('Scatter Plot: Predictions vs Measurements')
-
-# add the trendline to the plot
-model_linear_plot = LinearRegression()
-
-print(predictions)
-print(target)
-
-model_linear_plot.fit(predictions, target)
-plt.plot(predictions, model_linear_plot.predict(predictions), color='red', linewidth=2)
-plt.savefig('mlr_result.png')
-plt.show()
