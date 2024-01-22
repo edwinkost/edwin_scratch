@@ -90,9 +90,12 @@ predictors["ec"]                   = dataset["ec"]
 
 
 # convert to log scales
-predictors = np.log(predictors)
 target     = np.log(target)
+predictors = np.log(predictors)
 
+# convert selected to log scales
+target     = np.log(target)
+predictors["Area"] = np.log(predictors["Area"])
 
 # fit the model using all data - using sklearn
 mlr_model = LinearRegression()
