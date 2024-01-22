@@ -118,7 +118,7 @@ vif_data = pd.DataFrame()
 vif_data["feature"] = predictors.columns 
   
 # calculating VIF for each feature 
-vif_data["VIF"] = [variance_inflation_factor(X.values, i) 
-                          for i in range(len(X.columns))] 
+vif_data["VIF"] = [variance_inflation_factor(predictors.values, i) 
+                          for i in range(len(predictors.columns))] 
   
 print(vif_data)
