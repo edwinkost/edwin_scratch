@@ -89,9 +89,9 @@ predictors["bod"]                  = dataset["bod"]
 predictors["ec"]                   = dataset["ec"]
 
 
-# convert to log scales
-target     = np.log(target)
-predictors = np.log(predictors)
+# ~ # convert to log scales
+# ~ target     = np.log(target)
+# ~ predictors = np.log(predictors)
 
 # convert selected to log scales
 target     = np.log(target)
