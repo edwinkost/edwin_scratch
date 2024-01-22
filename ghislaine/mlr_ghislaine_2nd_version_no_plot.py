@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 
 import statsmodels.api as sm
 
+from statsmodels.stats.outliers_influence import variance_inflation_factor 
 
 # calculate performance values
 def calculate_performance(predictors, target_input, model_input):
@@ -100,9 +101,24 @@ mlr_model.fit(predictors,
 
 # fit the model using all data - using ols
 reg_ols = sm.OLS(target, sm.add_constant(predictors)).fit()
+print("")
+print("reg ols summary")
 print(reg_ols.summary())
+print("")
 
 # intercept and regression coefficients
-print("intercept and regression coefficients (using all data)")
+print("")
+print("intercept and regression coefficients from sklearn (using all data)")
 print(mlr_model.intercept_)
 print(mlr_model.coef_)
+print("")
+
+# VIF
+vif_data = pd.DataFrame() 
+vif_data["feature"] = predictors.columns 
+  
+# calculating VIF for each feature 
+vif_data["VIF"] = [variance_inflation_factor(X.values, i) 
+                          for i in range(len(X.columns))] 
+  
+print(vif_data)
