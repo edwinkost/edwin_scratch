@@ -84,8 +84,8 @@ predictors["Salinity"]             = dataset["Salinity"]
 predictors["BOD"]                  = dataset["BOD"]
 predictors["TP"]                   = dataset["TP"]
 predictors["NOXN"]                 = dataset["NOXN"]
-predictors["bod"]                  = dataset["bod"]
-predictors["ec"]                   = dataset["ec"]
+# ~ predictors["bod"]                  = dataset["bod"]
+# ~ predictors["ec"]                   = dataset["ec"]
 
 
 # convert to log scales
@@ -150,8 +150,8 @@ result_df_empty = pd.DataFrame(\
                               'reg_coef_7'          : pd.Series(dtype='float'),
                               'reg_coef_8'          : pd.Series(dtype='float'),
                               'reg_coef_9'          : pd.Series(dtype='float'),
-                              'reg_coef_10'         : pd.Series(dtype='float'),
-                              'reg_coef_11'         : pd.Series(dtype='float'),
+                              # ~ 'reg_coef_10'         : pd.Series(dtype='float'),
+                              # ~ 'reg_coef_11'         : pd.Series(dtype='float'),
                               'r_squared_train'     : pd.Series(dtype='float'),
                               'adj_r_squared_train' : pd.Series(dtype='float'),
                               'rmse_train'          : pd.Series(dtype='float'),
@@ -178,8 +178,8 @@ new_row = {
             'reg_coef_7'          : mlr_model.coef_[6],
             'reg_coef_8'          : mlr_model.coef_[7],
             'reg_coef_9'          : mlr_model.coef_[8],
-            'reg_coef_10'         : mlr_model.coef_[9],
-            'reg_coef_11'         : mlr_model.coef_[10],
+            # ~ 'reg_coef_10'         : mlr_model.coef_[9],
+            # ~ 'reg_coef_11'         : mlr_model.coef_[10],
             'r_squared_train'     : r_squared_all,
             'adj_r_squared_train' : adj_r_squared_all,
             'rmse_train'          : rmse_all,
