@@ -92,7 +92,7 @@ mlr_model.fit(predictors,
  target)
 
 # fit the model using all data - using ols
-reg_ols = sm.OLS(targett, sm.add_constant(predictors)).fit()
+reg_ols = sm.OLS(target, sm.add_constant(predictors)).fit()
 print(reg_ols.summary())
 
 # intercept and regression coefficients
