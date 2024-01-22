@@ -88,9 +88,9 @@ predictors["NOXN"]                 = dataset["NOXN"]
 # ~ predictors["ec"]                   = dataset["ec"]
 
 
-# convert to log scales
-predictors = np.log(predictors)
-target     = np.log(target)
+# ~ # convert to log scales
+# ~ predictors = np.log(predictors)
+# ~ target     = np.log(target)
 
 
 # fit the model using all data - using sklearn
