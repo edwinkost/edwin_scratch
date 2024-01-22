@@ -61,6 +61,8 @@ dataset = dataset.dropna()
 # - reset index
 dataset = dataset.reset_index(drop = True)
 
+
+
 # define the target variable
 #~ target = dataset["Species normalized"].astype(float)
 target = dataset["Species"].astype(float)
@@ -84,6 +86,11 @@ predictors["TP"]                   = dataset["TP"]
 predictors["NOXN"]                 = dataset["NOXN"]
 predictors["bod"]                  = dataset["bod"]
 predictors["ec"]                   = dataset["ec"]
+
+
+# convert to log scales
+predictors = np.log(predictors)
+target     = np.log(target)
 
 
 # fit the model using all data - using sklearn
