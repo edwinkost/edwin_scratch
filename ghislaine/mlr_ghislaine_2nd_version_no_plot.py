@@ -54,7 +54,7 @@ def calculate_performance(predictors, target_input, model_input):
 
 # read dataset
 dataset = pd.read_csv("example_uk.csv", encoding='ISO-8859-1', delimiter=',')
-print(dataset.to_string())
+# ~ print(dataset.to_string())
 # - replace 1.00E+31 with NaN
 dataset.replace(1.00E+31, np.nan, inplace=True)
 # - drop all rows with NaN
