@@ -77,16 +77,16 @@ target = dataset["Species"].astype(float)
 predictors = pd.DataFrame()
 # - using the following variables Area, Groundwater recharge,Groundwater depth,Evaporation,Discharge,Salinity,BOD,TP,NOXN,bod,ec
 predictors["Area"]                 = dataset["Area"]
-# ~ predictors["Groundwater recharge"] = dataset["Groundwater recharge"]
-# ~ predictors["Groundwater depth"]    = dataset["Groundwater depth"]
-# ~ predictors["Evaporation"]          = dataset["Evaporation"]
+predictors["Groundwater recharge"] = dataset["Groundwater recharge"]
+predictors["Groundwater depth"]    = dataset["Groundwater depth"]
+predictors["Evaporation"]          = dataset["Evaporation"]
 predictors["Discharge"]            = dataset["Discharge"]
 predictors["Salinity"]             = dataset["Salinity"]
 predictors["BOD"]                  = dataset["BOD"]
-# ~ predictors["TP"]                   = dataset["TP"]
-# ~ predictors["NOXN"]                 = dataset["NOXN"]
-# ~ predictors["bod"]                  = dataset["bod"]
-# ~ predictors["ec"]                   = dataset["ec"]
+predictors["TP"]                   = dataset["TP"]
+predictors["NOXN"]                 = dataset["NOXN"]
+predictors["bod"]                  = dataset["bod"]
+predictors["ec"]                   = dataset["ec"]
 
 
 # convert to log scales
