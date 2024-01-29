@@ -50,11 +50,10 @@ def calculate_performance(predictors, target_input, model_input):
     return r_squared, adj_r_squared, rmse, mae 
 
 
-
-
 # read dataset
+# ~ # - england
 # ~ dataset = pd.read_csv("example_uk.csv", encoding='ISO-8859-1', delimiter=',')
-
+# ~ # - uk
 dataset = pd.read_csv("wetland_species_aus.csv", encoding='ISO-8859-1', delimiter=',')
 
 # ~ print(dataset.to_string())
@@ -100,9 +99,9 @@ predictors["bod"]                  = dataset["bod"]
 predictors["ec"]                   = dataset["ec"]
 
 
-# convert to log scales
-target     = np.log(target)
-predictors = np.log(predictors)
+# ~ # convert to log scales
+# ~ target     = np.log(target)
+# ~ predictors = np.log(predictors)
 
 # ~ # convert selected to log scales
 # ~ target     = np.log(target)
