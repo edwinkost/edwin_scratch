@@ -78,6 +78,7 @@ dataset = np.log(dataset)
 
 ##########################################################################
 
+print(dataset)
 
 # define the target variable
 #~ target = dataset["Species normalized"].astype(float)
