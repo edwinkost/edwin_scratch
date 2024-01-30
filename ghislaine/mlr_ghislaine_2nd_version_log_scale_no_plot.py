@@ -93,15 +93,15 @@ predictors["Evaporation"]          = dataset["Evaporation"]
 predictors["Discharge"]            = dataset["Discharge"]
 predictors["Salinity"]             = dataset["Salinity"]
 predictors["BOD"]                  = dataset["BOD"]
-# ~ predictors["TP"]                   = dataset["TP"]
-# ~ predictors["NOXN"]                 = dataset["NOXN"]
-# ~ predictors["bod"]                  = dataset["bod"]
-# ~ predictors["ec"]                   = dataset["ec"]
+predictors["TP"]                   = dataset["TP"]
+predictors["NOXN"]                 = dataset["NOXN"]
+predictors["bod"]                  = dataset["bod"]
+predictors["ec"]                   = dataset["ec"]
 
 
-# ~ # convert to log scales
-# ~ target     = np.log(target)
-# ~ predictors = np.log(predictors)
+# convert to log scales
+target     = np.log(target)
+predictors = np.log(predictors)
 
 # ~ # convert selected to log scales
 # ~ target     = np.log(target)
