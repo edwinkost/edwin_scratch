@@ -61,6 +61,9 @@ dataset = dataset.dropna()
 dataset = dataset.reset_index(drop = True)
 
 
+##########################################################################
+# DO THE FOLLOWING FOR TRANSFORMING DATASET VALUES TO THEIR LOG VALUES
+
 # remove some columns that are not needed 
 dataset = dataset.drop(['Wetlands name', 'State', "lat", "lon"], axis = 1)
 
@@ -70,14 +73,15 @@ dataset = dataset.dropna()
 # - reset index
 dataset = dataset.reset_index(drop = True)
 
-# convert the dataset to log scales
+# convert the dataset values to log scales
 dataset = np.log(dataset)
+
+##########################################################################
+
 
 # define the target variable
 #~ target = dataset["Species normalized"].astype(float)
 target = dataset["Species"].astype(float)
-
-
 
 
 # define the predictors
