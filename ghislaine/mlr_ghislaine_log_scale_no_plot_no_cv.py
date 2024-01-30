@@ -70,13 +70,13 @@ dataset = dataset.dropna()
 # - reset index
 dataset = dataset.reset_index(drop = True)
 
+# convert the dataset to log scales
+dataset = np.log(dataset)
+
 # define the target variable
 #~ target = dataset["Species normalized"].astype(float)
 target = dataset["Species"].astype(float)
 
-# convert the target and predictor variables to log scales
-target     = np.log(target)
-predictors = np.log(predictors)
 
 
 
