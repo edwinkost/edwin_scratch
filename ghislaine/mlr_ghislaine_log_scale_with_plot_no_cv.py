@@ -46,10 +46,10 @@ def calculate_performance(predictors, target_input, model_input):
 
 
 # read dataset
-# ~ # - england
-# ~ dataset = pd.read_csv("example_uk.csv", encoding='ISO-8859-1', delimiter=',')
-# - australia
-dataset = pd.read_csv("wetland_species_aus.csv", encoding='ISO-8859-1', delimiter=',')
+# - england
+dataset = pd.read_csv("example_uk.csv", encoding='ISO-8859-1', delimiter=',')
+# ~ # - australia
+# ~ dataset = pd.read_csv("wetland_species_aus.csv", encoding='ISO-8859-1', delimiter=',')
 
 # ~ print(dataset.to_string())
 
