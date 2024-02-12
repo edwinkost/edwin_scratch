@@ -140,6 +140,7 @@ predictions = pd.DataFrame(mlr_model.predict(predictors))
 print(predictions)
 
 
+
 # create scatter plots between 'measurements (y)' and 'predicted values (x)'
 plt.figure(figsize=(8, 6))
 plt.scatter(x = target, y = predictions)
@@ -148,8 +149,8 @@ plt.title('Scatter Plot: Predictions vs Measurements')
 # add the trendline to the plot
 model_linear_plot = LinearRegression()
 
-print(predictions)
-print(target)
+# ~ print(predictions)
+# ~ print(target)
 
 model_linear_plot.fit(predictions, target)
 plt.plot(predictions, model_linear_plot.predict(predictions), color='red', linewidth=2)
